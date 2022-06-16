@@ -1,0 +1,9 @@
+.viewport {
+    border: 2px solid #AAAAAA;
+
+    ::ng-deep {
+        .image-page {
+            border: 2px solid #AAAAAA;
+        }
+    }
+}
