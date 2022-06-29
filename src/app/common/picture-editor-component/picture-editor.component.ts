@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
-import { BrushTool, PictureEditor } from "picture-editor";
+import { BrushTool, PanoramerTool, PictureEditor } from "picture-editor";
 import { mockLayers } from "./layers-mock";
 
 @Component({
@@ -18,15 +18,12 @@ export class PictureEditorComponent {
                 height: 2000,
             },
             viewportConfig: {
-                width: 1500,
-                height: 900,
             }
         });
-        const brushTool = new BrushTool();
-        pictureEditor.setActiveTool(brushTool);
-        const createdLayers = pictureEditor.layersManager.addBulkLayers(mockLayers);
-        // const layer = pictureEditor.addLayer();
-        console.log("Layers created", createdLayers);
+        // const brushTool = new BrushTool();
+        // const panTool = new PanoramerTool();
+        pictureEditor.setActiveTool(PanoramerTool);
+        pictureEditor.layersManager.addBulkLayers(mockLayers);
     }
 
 }
