@@ -1,5 +1,6 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
-import { BrushTool, PanoramerTool, PictureEditor } from "picture-editor";
+import { BrushTool, PanoramerTool, PictureEditor, TestBrush } from "picture-editor";
+import { runTests } from "../test/tests";
 import { mockLayers } from "./layers-mock";
 
 @Component({
@@ -10,20 +11,35 @@ import { mockLayers } from "./layers-mock";
 export class PictureEditorComponent {
     @ViewChild('viewport') viewPort: ElementRef;
 
-    ngAfterViewInit() {
-        const pictureEditor = new PictureEditor({
+    private pictureEditor: PictureEditor;
+
+    async ngAfterViewInit() {
+        this.pictureEditor = new PictureEditor({
             placeholder: this.viewPort.nativeElement,
             documentConfig: {
                 width: 3000,
                 height: 2000,
             },
             viewportConfig: {
+                //width: 1000,
+                //height: 500,
+                zoom: 1,
             }
         });
-        // const brushTool = new BrushTool();
-        // const panTool = new PanoramerTool();
-        pictureEditor.setActiveTool(PanoramerTool);
-        pictureEditor.layersManager.addBulkLayers(mockLayers);
+
+        this.pictureEditor.setActiveTool(BrushTool);
+        const brushTool = this.pictureEditor.toolManager.getToolInstance<BrushTool>(BrushTool);
+        this.pictureEditor.setActiveColor({ r: 155, g: 0, b: 0, a: 1 });
+        brushTool.setBrushSize(120);
+        brushTool.setBrushHardness(0.1);
+        brushTool.setBrushOpacity(1);
+        brushTool.setStepRatio(0.2);
+        brushTool.setBrushFlow(0.1);
+        brushTool.setBrush(new TestBrush());
+        await this.pictureEditor.layersManager.addBulkLayers(mockLayers);
+        // pictureEditor.layersManager.setActiveLayer(pictureEditor.layersManager.layers[2]);
+        runTests(this.pictureEditor.layersManager);
     }
+
 
 }
