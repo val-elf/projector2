@@ -1,15 +1,15 @@
 import {
 	I2DCoordinates,
-	IPointPosition,
 	IRGBA,
-	TestBrush,
 	hardness,
-	BrushManager
+	BrushManager,
+	StandardBrush,
 } from "picture-editor";
-import { testPoints, testPoints3, testPoints5 } from "./points.test";
+import { IPenPointer } from 'picture-editor/build/tools/brush-tool/brushes/brush.model';
+import { testPoints1, testPoints3, testPoints5 } from "./points";
 
 class TestBrushManager extends BrushManager {
-	public getSpot(point: IPointPosition, destination: ImageData) {
+	public getSpot(point: IPenPointer, destination: ImageData) {
 		return super.getCurrentBrush().setSpot(point, destination);
 	}
 
@@ -18,8 +18,11 @@ class TestBrushManager extends BrushManager {
 	}
 }
 
-const brush = new TestBrushManager();
+export const brushManager = new TestBrushManager();
+/*
+brush.setBrush(new StandardBrush());
 brush.setBrush(new TestBrush());
+*/
 
 function putPoint(p: { x: number, y: number }, color: IRGBA, out: ImageData) {
 	const c = p.y * out.width + p.x;
@@ -60,10 +63,10 @@ function drawLine(x0: number, y0: number, x1: number, y1: number, color: IRGBA, 
 }
 
 function drawGrid(out: ImageData) {
-	const green = { r: 0, g: 152, b: 0, a: 1 };
+	const green = { r: 0, g: 152, b: 0, a: 0.1 };
 	drawLine(300, 301, 2300, 301, green, out);
 	for(let i = 0; i < 10; i ++) {
-		drawLine(300 + i * 100, 100, 300 + i* 100, 300, { ...green, a: 0.6 }, out);
+		drawLine(300 + i * 100, 100, 300 + i* 100, 301, { ...green, a: 0.1 }, out);
 	}
 }
 // hardness 0.1 = 10, 0.75
@@ -72,32 +75,46 @@ function drawGrid(out: ImageData) {
 
 export function testForCheckingThickness(out: ImageData) {
 	const canvas = document.createElement("canvas");
-	const hardness = 0.01;
-	const flow = 1;
 	Object.assign(canvas, { width: out.width, height: out.height });
 	const ctx = canvas.getContext('2d');
 	let output = ctx.createImageData(out.width, out.height);
-	const dx = 1; const dy = 1;
-	const count = 1;
-	let size = 80;
-	const sx = 0.1;
-	let p1: IPointPosition = { x: 100, y: 100, size, hardness, flow, roundness: 1, rotate: 0, color: { r: 195, g: 0, b: 0, a: 1 } };
- 	let p2 = { ...p1 };
+	let dx = 40; let dy = 40;
+	const count = 10;
+	let size = 0.35;
+	const ds = 0.1;
+	const dfx = 0;
+	const dfy = 0;
+	let startPoint: IPenPointer = {
+		x: 500,
+		y: 500,
+		size,
+		tilt: { x: 0, y: 0},
+		tangentialPressure: 0,
+		twist: 0,
+		color: { r: 195, g: 0, b: 0, a: 1 }
+	};
+ 	let p2 = { ...startPoint };
+	let p1 = { ...p2 };
+	brushManager.startDraw(startPoint);
 	for(let i = 0; i < count; i ++) {
-		p2.size += sx;
+		p2.size += ds;
 		p2.x += dx;
 		p2.y += dy;
-		p1 = brush.drawLine(p1, p2, output, 0.1);
+		dx += dfx;
+		dy += dfy;
+		p1 = brushManager.drawLine(p1, p2, output);
 	}
+	brushManager.endDraw();
 	ctx.putImageData(output, 0, 0);
-	let x = 100;
-	let y = 100;
+	let x = startPoint.x;
+	let y = startPoint.y;
+	const brushSize = brushManager.getCurrentBrush().spotSize ?? 10;
 	ctx.font = "bold 8px sans";
 	for(let i = 0; i < count; i ++) {
-		ctx.fillText(`${size.toFixed(2)}`, x + 6, y - 5);
+		ctx.fillText(`${(size * brushSize).toFixed(2)}`, x, y);
 		x += dx;
 		y += dy;
-		size += sx;
+		size += ds;
 	}
 	output = ctx.getImageData(0, 0, out.width, out.height);
 	out.data.set(output.data);
@@ -144,19 +161,25 @@ export function test2(width: number, height: number) {
 		const re = (i + 1);
 		// const res = brush.getSpot(r, hardness, 1, 0, red);
 		// brush.drawTo(rdata, res, { x: 70 + c * step, y: 40 - r }, true);
-		brush.drawLine({
+		brushManager.drawLine({
 			...locbase,
 			color: colors[6],
 			size: rs,
+			tilt: { x: 0, y: 0 },
+			tangentialPressure: 0,
+			twist: 0,
 			x: 70 + c,
 			y: 40,
 		}, {
 			...locbase,
 			color: colors[6],
 			size: re,
+			tilt: { x: 0, y: 0 },
+			tangentialPressure: 0,
+			twist: 0,
 			x: 70 + c + step,
 			y: 40,
-		}, rdata, 0.3)
+		}, rdata);
 		/* dpoints(
 			{ x: 70 + c * 70, y: 60, width, hardness },
 			{ x: 70 + c * 70 + 200, y: 350, width: width + 1, hardness },
@@ -173,85 +196,92 @@ export function test3(out: ImageData) {
 	let pp;
 	for(let i = 0; i < points.length; i++) {
 		// points[i].hardness = 0.1;
-		points[i].flow = 0.5;
+		// points[i].flow = 0.5;
 		if (pp) {
-			brush.drawLine(pp, points[i], out, 0.5);
+			brushManager.drawLine(pp, {
+				...points[i],
+				tilt: { x: 0, y: 0 },
+				tangentialPressure: 0,
+				twist: 0,
+			 }, out);
 		}
 		pp = points[i];
 	}
 }
 
+const drawPoint = (x: number, y: number, color: IRGBA, zoom: number, out: ImageData) =>
+	putPoint({ x: Math.round(x * zoom) + 300, y: 300 - Math.round(y * zoom) }, color, out);
+
+
 export function test4(out: ImageData) {
-	const red = { r: 255, g: 0, b: 0, a: 1 };
-	const r = 60;
 	drawGrid(out);
+	const hards = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1];
+	// const hards = [0.5];
 
-	for (let i = 0; i <= 20; i+= 0.01) {
-		const y1 = hardness(i, 0.1); //gauss(i, i , 5);
-		const y2 = hardness(i, 0.3); //gauss(i, i , 5);
-		const y3 = hardness(i, 0.5); //gauss(i, i , 5);
-		const y4 = hardness(i, 0.7); //gauss(i, i , 5);
-		const y5 = hardness(i, 1); //gauss(i, i , 5);
-		putPoint({ x: Math.round(i * 100) + 300, y: 300 - Math.round(y1 * 100) }, colors[0], out);
-		putPoint({ x: Math.round(i * 100) + 300, y: 300 - Math.round(y2 * 100) }, colors[1], out);
-		putPoint({ x: Math.round(i * 100) + 300, y: 300 - Math.round(y3 * 100) }, colors[2], out);
-		putPoint({ x: Math.round(i * 100) + 300, y: 300 - Math.round(y4 * 100) }, colors[3], out);
-		putPoint({ x: Math.round(i * 100) + 300, y: 300 - Math.round(y5 * 100) }, colors[4], out);
-		// console.log("I, y", { i, y });
+	for (let i = 0; i <= 1; i+= 0.005) {
+		hards.forEach((h, index) => {
+
+			const y = hardness(i, h);
+
+			drawPoint(i, y, colors[index], 200, out);
+		});
 	}
+}
 
-	/*brush.drawPoint({
-		x: 300,
-		y: 300,
-		size: 120,
-		color: { r: 255, g: 0, b: 0,  a: 1 },
-		hardness: 1,
-		flow: 1,
-		rotate: 0,
-		roundness: 1,
-	}, out);*/
+export function testDrawLine(out: ImageData, points: IPenPointer[]) {
+	let p;
+	for(let i = 0; i < points.length; i ++) {
+		if (p) {
+			const np = brushManager.drawLine(p, points[i], out);
+			if (np) p = np;
+		} else p = points[i];
+	}
 }
 
 export function test5(out: ImageData) {
 	const points = testPoints5;
-	points.forEach(p => brush.drawPoint(p, out));
+	points.forEach(p => brushManager.drawPoint({
+		...p,
+		tilt: { x: 0, y: 0 },
+		tangentialPressure: 0,
+		twist: 0,
+	}, out));
 }
 
 export function test6(out: ImageData) {
-	brush.drawPoint({
-		size: 40,
+	brushManager.drawPoint({
+		size: 1,
+		tilt: { x: 0, y: 0 },
+		tangentialPressure: 0,
+		twist: 0,
 		x: 600,
 		y: 400,
 		color: { r: 255, g: 0, b: 0, a: 255 },
-		hardness: 0.1,
-		roundness: 1,
-		rotate: 0,
-		flow: 1,
 	}, out);
 
-	brush.drawPoint({
-		size: 40,
+	brushManager.drawPoint({
+		size: 1,
+		tilt: { x: 0, y: 0 },
+		tangentialPressure: 0,
+		twist: 0,
 		x: 606,
 		y: 400,
 		color: { r: 255, g: 0, b: 0, a: 255},
-		hardness: 0.1,
-		roundness: 1,
-		rotate: 0,
-		flow: 1,
 	}, out);
 }
 
 const colors = [
-	{ r: 255, g: 255, b: 0, a: 1 },
-	{ r: 0, g: 255, b: 0, a: 1},
-	{ r: 0, g: 255, b: 0, a: 1},
+	{ r: 200, g: 0, b: 0, a: 1 },
+	{ r: 230, g: 235, b: 0, a: 1},
+	{ r: 0, g: 155, b: 255, a: 1},
 	{ r: 255, g: 155, b: 0, a: 1},
-	{ r: 155, g: 255, b: 0, a: 1},
-	{ r: 0, g: 255, b: 155, a: 1},
+	{ r: 255, g: 0, b: 200, a: 1},
+	{ r: 120, g: 0, b: 155, a: 1},
 	{ r: 0, g: 0, b: 255, a: 1},
 	{ r: 125, g: 0, b: 125, a: 1},
 	{ r: 125, g: 0, b: 0, a: 1},
 	{ r: 25, g: 155, b: 255, a: 1},
+	{ r: 125, g: 115, b: 55, a: 1},
 ]
 
 const getPoints = (p1, p2, color, count) => {
@@ -279,12 +309,11 @@ const getPoints = (p1, p2, color, count) => {
 
 const dpoints = (p1, p2, opacity, count, data) => {
 	let lpoint;
-	let stepRatio = 0.1;
 	opacity = opacity || 255;
 
 	const pts = getPoints(p1, p2, { r: 128, g: 128, b: 128, a: opacity }, count);
 	pts.forEach(pt => {
-		if (lpoint) brush.drawLine(lpoint, pt, data, stepRatio);
+		if (lpoint) brushManager.drawLine(lpoint, pt, data);
 		lpoint = pt;
 	});
 
@@ -292,8 +321,13 @@ const dpoints = (p1, p2, opacity, count, data) => {
 
 function outPtss(data) {
 	let lp = null;
-	testPoints.forEach(pt => {
-		if (lp) brush.drawLine(lp, pt, data, 0.1);
+	testPoints1.forEach(pt => {
+		if (lp) brushManager.drawLine(lp, {
+			...pt,
+			tilt: { x: 0, y: 0 },
+			tangentialPressure: 0,
+			twist: 0,
+		}, data);
 		lp = pt;
 	});
 }

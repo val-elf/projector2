@@ -2,3 +2,14 @@
     width: 100%;
     height: 100%;
 }
+
+.brush-switcher {
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    width: 100px;
+    height: 20px;
+    background-color: white;
+    border-radius: 10px;
+    border: 1px solid gray;
+}

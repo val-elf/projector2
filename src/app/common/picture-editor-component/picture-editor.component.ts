@@ -1,6 +1,6 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
-import { BrushTool, PanoramerTool, PictureEditor, TestBrush } from "picture-editor";
-import { runTests } from "../test/tests";
+import { BrushTool, FillBrush, PanoramerTool, PictureEditor, StandardBrush, SampledTestBrush, TestBrush, EraserTool, IBrush } from "picture-editor";
+import { runTests } from "../test";
 import { mockLayers } from "./layers-mock";
 
 @Component({
@@ -13,7 +13,10 @@ export class PictureEditorComponent {
 
     private pictureEditor: PictureEditor;
 
+    private brush: IBrush;
+
     async ngAfterViewInit() {
+        const a = 0;
         this.pictureEditor = new PictureEditor({
             placeholder: this.viewPort.nativeElement,
             documentConfig: {
@@ -28,17 +31,52 @@ export class PictureEditorComponent {
         });
 
         this.pictureEditor.setActiveTool(BrushTool);
-        const brushTool = this.pictureEditor.toolManager.getToolInstance<BrushTool>(BrushTool);
         this.pictureEditor.setActiveColor({ r: 155, g: 0, b: 0, a: 1 });
-        brushTool.setBrushSize(120);
-        brushTool.setBrushHardness(0.1);
-        brushTool.setBrushOpacity(1);
-        brushTool.setStepRatio(0.2);
-        brushTool.setBrushFlow(0.1);
-        brushTool.setBrush(new TestBrush());
+
+        const brushTool = this.pictureEditor.toolManager.getToolInstance<BrushTool>(BrushTool);
+        const brush = new StandardBrush();
+        const testBrush = new TestBrush(10, 0.9, 0.2);
+        const extendedBrush = new SampledTestBrush(30, 1, 0.5);
+        const fillBrush = new FillBrush();
+
+        // this.brush = brush;
+        // this.brush = testBrush;
+        // this.brush = fillBrush;
+        this.brush = extendedBrush;
+
+        brush.setup({
+            size: 120,
+            hardness: 0.3,
+            opacity: 1,
+            stepRatio: 0.1,
+            flow: 0.2,
+            minSize: "1%",
+            maxSize: "100%",
+        });
+
+        brushTool.brush = this.brush;
+
         await this.pictureEditor.layersManager.addBulkLayers(mockLayers);
         // pictureEditor.layersManager.setActiveLayer(pictureEditor.layersManager.layers[2]);
-        runTests(this.pictureEditor.layersManager);
+        // runTests(this.pictureEditor);
+    }
+
+    brushMode = 'brush';
+
+    public toggleBrushMode() {
+        if (this.brushMode === 'brush') {
+            this.brushMode = 'eraser';
+        } else this.brushMode = 'brush';
+
+        switch(this.brushMode) {
+            case 'eraser':
+                const toolInstance = this.pictureEditor.setActiveTool(EraserTool);
+                toolInstance.setBrush(this.brush);
+                break;
+            case 'brush':
+                this.pictureEditor.setActiveTool(BrushTool);
+                break;
+        }
     }
 
 
