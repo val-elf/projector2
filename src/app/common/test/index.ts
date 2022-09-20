@@ -7,24 +7,31 @@ import {
 	test5,
 	test6,
 	testDrawLine,
-	testForCheckingThickness
+	testForCheckingThickness,
+	testSpotShift
 } from "./brush-tests";
-import { BrushTool, ILayersManager, PictureEditor } from "picture-editor";
+import { BrushTool, IBrush, ILayersManager, PictureEditor, SampledTestBrush } from "picture-editor";
 import { testPoints1, testPoints2 } from './points';
 
-export function runTests(editor: PictureEditor){
+export function runTests(editor: PictureEditor, brush?: IBrush){
 	const { layersManager } = editor;
     const layer = layersManager.activeLayer;
 	if (!layer) return;
-	brushManager.setBrush(editor.toolManager.getToolInstance<BrushTool>(BrushTool).brush);
+	brush = brush ?? new SampledTestBrush(10, 1, 1);
+	(<any>brush).minSize = 0.0;
+	(<any>brush).stepRatio = 0.2;
+
+	brushManager.setBrush(brush);
 	setTimeout(() => {
 		console.log("Start test brush");
 		const wl = layersManager.initWorkingLayer({ x: 0, y: 0, width: 3000, height: 3000 });
 
 		// tests zone
-
-		testForCheckingThickness(wl.source);
-		// testDrawLine(wl.source, testPoints2);
+		// testSpotShift(wl.source);
+		// testForCheckingThickness(wl.source, { startX: 520, startY: 220, count: 1, minSize: 0.001, maxSize: 1, length: 630, angle: 40 });
+		// testForCheckingThickness(wl.source, { startX: 520, startY: 220, count: 1, minSize: 0.01, maxSize: 1, angle: 6, length: 300 });
+		// testForCheckingThickness(wl.source, { startX: 620, startY: 220, count: 20, minSize: 0.001, maxSize: 1, angle: 6, length: 300 });
+		testDrawLine(wl.source, testPoints2);
 
 		// end tests zone
 

@@ -4,8 +4,8 @@ import {
 	hardness,
 	BrushManager,
 	StandardBrush,
-} from "picture-editor";
-import { IPenPointer } from 'picture-editor/build/tools/brush-tool/brushes/brush.model';
+} from 'picture-editor';
+import { IPenPointer, IPointerBase } from 'picture-editor/build/tools/brush-tool/brushes/brush.model';
 import { testPoints1, testPoints3, testPoints5 } from "./points";
 
 class TestBrushManager extends BrushManager {
@@ -13,9 +13,9 @@ class TestBrushManager extends BrushManager {
 		return super.getCurrentBrush().setSpot(point, destination);
 	}
 
-	public drawTo(dest: ImageData, source: ImageData, pos: I2DCoordinates, smooth = false) {
+	/*public drawTo(dest: ImageData, source: ImageData, pos: I2DCoordinates, smooth = false) {
 		return super.drawTo(dest, source, pos, smooth);
-	}
+	}*/
 }
 
 export const brushManager = new TestBrushManager();
@@ -73,20 +73,55 @@ function drawGrid(out: ImageData) {
 // hardness 0.5 = 2.5 1.5
 // hardness 1 =
 
-export function testForCheckingThickness(out: ImageData) {
-	const canvas = document.createElement("canvas");
-	Object.assign(canvas, { width: out.width, height: out.height });
-	const ctx = canvas.getContext('2d');
-	let output = ctx.createImageData(out.width, out.height);
-	let dx = 40; let dy = 40;
-	const count = 10;
-	let size = 0.35;
-	const ds = 0.1;
+const clonePoint = (p: IPenPointer): IPenPointer => ({
+	x: p.x,
+	y: p.y,
+	size: p.size,
+	tangentialPressure: p.tangentialPressure,
+	tilt: { x: p.tilt.x, y: p.tilt.y },
+	color: p.color,
+	twist: p.twist,
+})
+
+interface ITestForThicknessConfig {
+	startX: number,
+	startY: number,
+	count: number,
+	minSize: number,
+	maxSize: number,
+	length?: number,
+	angle?: number,
+}
+
+export function testForCheckingThickness(out: ImageData, {
+	startX,
+	startY,
+	count,
+	minSize,
+	maxSize,
+	length,
+	angle,
+}: ITestForThicknessConfig = {
+	startX: 500,
+	startY: 500,
+	count: 1,
+	minSize: 0.001,
+	maxSize: 1,
+	length: 800,
+	angle: 45
+}) {
+	if (length === undefined) length = 800;
+	if (angle === undefined) angle = 45;
+	let dx = length * Math.sin(angle / 180 * Math.PI) / count;
+	let dy = length * Math.cos(angle / 180 * Math.PI) / count;
+	console.log('DX,DY', { dx, dy });
+	let size = minSize;
+	const ds = (maxSize - minSize) / count;
 	const dfx = 0;
 	const dfy = 0;
 	let startPoint: IPenPointer = {
-		x: 500,
-		y: 500,
+		x: startX,
+		y: startY,
 		size,
 		tilt: { x: 0, y: 0},
 		tangentialPressure: 0,
@@ -97,27 +132,51 @@ export function testForCheckingThickness(out: ImageData) {
 	let p1 = { ...p2 };
 	brushManager.startDraw(startPoint);
 	for(let i = 0; i < count; i ++) {
+		p2 = clonePoint(p1);
 		p2.size += ds;
 		p2.x += dx;
 		p2.y += dy;
 		dx += dfx;
 		dy += dfy;
-		p1 = brushManager.drawLine(p1, p2, output);
+		p1 = brushManager.drawLine(p1, p2, out);
 	}
 	brushManager.endDraw();
-	ctx.putImageData(output, 0, 0);
-	let x = startPoint.x;
-	let y = startPoint.y;
+
+	const canvas = document.createElement("canvas");
+	Object.assign(canvas, { width: out.width, height: out.height });
+	const ctx = canvas.getContext('2d');
+	ctx.putImageData(out, 0, 0);
+	let x = startX;
+	let y = startY;
 	const brushSize = brushManager.getCurrentBrush().spotSize ?? 10;
 	ctx.font = "bold 8px sans";
 	for(let i = 0; i < count; i ++) {
-		ctx.fillText(`${(size * brushSize).toFixed(2)}`, x, y);
+		ctx.fillText(`${(size * brushSize).toFixed(2)}`, x + 5, y);
 		x += dx;
 		y += dy;
 		size += ds;
 	}
-	output = ctx.getImageData(0, 0, out.width, out.height);
+	const output = ctx.getImageData(0, 0, out.width, out.height);
 	out.data.set(output.data);
+}
+
+export function testSpotShift(out: ImageData) {
+	const brush = brushManager.getCurrentBrush();
+	const ystep = 12;
+	const count = 5;
+	const xstep = 0;
+	const rstep = 0.01;
+	(<any>brush.brushSettings).size = 5;
+	(<any>brush.brushSettings).flow = 0.5;
+	(<any>brush.brushSettings).size = 50;
+	for (let i = 0; i < count; i+= 1) {
+		brush.setSpot({
+			x: 520.5 + i * xstep,
+			y: 225 + i * ystep,
+			color: { r: 255, g: 0, b: 0, a: 1 },
+			size: 0.1 + rstep * i,
+		} as IPointerBase,  out);
+	}
 }
 
 export function test1(width: number, height: number): ImageData {
@@ -230,6 +289,7 @@ export function test4(out: ImageData) {
 
 export function testDrawLine(out: ImageData, points: IPenPointer[]) {
 	let p;
+	console.log("Points", points);
 	for(let i = 0; i < points.length; i ++) {
 		if (p) {
 			const np = brushManager.drawLine(p, points[i], out);

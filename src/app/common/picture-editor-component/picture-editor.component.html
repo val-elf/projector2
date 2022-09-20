@@ -1,2 +1,8 @@
 <div #viewport class="viewport"></div>
-<div class="brush-switcher" (click)="toggleBrushMode()">{{ brushMode }}</div>
+<div class="menu-button brush-switcher" (click)="toggleBrushMode()">{{ brushMode }}</div>
+<div class="menu-button log-switcher" (click)="toggleLogMode()">Log is: {{ logMode ? 'on' : 'off' }}</div>
+<app-color-selector
+    class="color-selector"
+    [color]="initialColor"
+    (onChangeColor)="changeColor($event)"
+></app-color-selector>

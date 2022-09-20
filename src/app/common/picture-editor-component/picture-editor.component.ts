@@ -1,22 +1,43 @@
-import { Component, ElementRef, ViewChild } from "@angular/core";
-import { BrushTool, FillBrush, PanoramerTool, PictureEditor, StandardBrush, SampledTestBrush, TestBrush, EraserTool, IBrush } from "picture-editor";
-import { runTests } from "../test";
-import { mockLayers } from "./layers-mock";
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import {
+    BrushTool,
+    FillBrush,
+    PanoramerTool,
+    PictureEditor,
+    StandardBrush,
+    SampledTestBrush,
+    TestBrush,
+    EraserTool,
+    IBrush,
+    ColorSelector,
+    IRGBA
+} from 'picture-editor';
+import { runTests } from '../test';
+import { mockLayers } from './layers-mock';
 
 @Component({
     selector: 'app-picture-editor',
     templateUrl: './picture-editor.component.html',
     styleUrls: ['./picture-editor.component.scss'],
 })
-export class PictureEditorComponent {
+export class PictureEditorComponent implements AfterViewInit, OnInit{
     @ViewChild('viewport') viewPort: ElementRef;
 
-    private pictureEditor: PictureEditor;
+    public pictureEditor: PictureEditor;
 
     private brush: IBrush;
+    private brushTool: BrushTool;
+    public initialColor: IRGBA = { r: 155, g: 0, b: 0, a: 1 };
+
+    constructor(
+        private element: ElementRef,
+        private changeDetectorRef: ChangeDetectorRef
+    ) { }
+
+    ngOnInit() {
+    }
 
     async ngAfterViewInit() {
-        const a = 0;
         this.pictureEditor = new PictureEditor({
             placeholder: this.viewPort.nativeElement,
             documentConfig: {
@@ -31,16 +52,19 @@ export class PictureEditorComponent {
         });
 
         this.pictureEditor.setActiveTool(BrushTool);
-        this.pictureEditor.setActiveColor({ r: 155, g: 0, b: 0, a: 1 });
+        this.pictureEditor.setActiveColor(this.initialColor);
+        this.changeDetectorRef.detectChanges();
 
-        const brushTool = this.pictureEditor.toolManager.getToolInstance<BrushTool>(BrushTool);
+        this.brushTool = this.pictureEditor.toolManager.getToolInstance<BrushTool>(BrushTool);
+        this.brushTool.setPointsLog(this.logMode);
         const brush = new StandardBrush();
-        const testBrush = new TestBrush(10, 0.9, 0.2);
-        const extendedBrush = new SampledTestBrush(30, 1, 0.5);
+        const newBrush = new TestBrush(10, 0.2, 0.2);
+        const extendedBrush = new SampledTestBrush(10, 1, 0.5);
+        // extendedBrush.stepRatio = 0.1;
         const fillBrush = new FillBrush();
 
         // this.brush = brush;
-        // this.brush = testBrush;
+        // this.brush = newBrush;
         // this.brush = fillBrush;
         this.brush = extendedBrush;
 
@@ -54,14 +78,26 @@ export class PictureEditorComponent {
             maxSize: "100%",
         });
 
-        brushTool.brush = this.brush;
+        this.brushTool.brush = this.brush;
 
         await this.pictureEditor.layersManager.addBulkLayers(mockLayers);
-        // pictureEditor.layersManager.setActiveLayer(pictureEditor.layersManager.layers[2]);
-        // runTests(this.pictureEditor);
+        // this.pictureEditor.layersManager.setActiveLayer(pictureEditor.layersManager.layers[2]);
+        runTests(this.pictureEditor);
     }
 
     brushMode = 'brush';
+    logMode = false;
+
+    public changeColor(color: IRGBA) {
+        this.pictureEditor?.setActiveColor(color);
+        this.changeDetectorRef.detectChanges();
+    }
+
+    public toggleLogMode() {
+        this.logMode = !this.logMode;
+        console.log('Toggle log mode', this.logMode);
+        this.brushTool.setPointsLog(this.logMode);
+    }
 
     public toggleBrushMode() {
         if (this.brushMode === 'brush') {

@@ -1,16 +1,14 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
-import { PictureEditorComponent } from "./picture-editor-component/picture-editor.component";
+import { PictureEditorModule } from './picture-editor-component/picture-editor.module';
 
 @NgModule({
     imports: [
-        CommonModule
-    ],
-    declarations: [
-        PictureEditorComponent,
+        CommonModule,
+        PictureEditorModule,
     ],
     exports: [
-        PictureEditorComponent,
+        PictureEditorModule
     ]
 })
 export class CommonSharedModule {}

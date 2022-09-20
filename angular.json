@@ -126,5 +126,8 @@
         }
       }
     }},
-  "defaultProject": "projector2"
+  "defaultProject": "projector2",
+  "cli": {
+    "analytics": "30daae91-b982-45c0-bdf7-4212b0143baf"
+  }
 }
