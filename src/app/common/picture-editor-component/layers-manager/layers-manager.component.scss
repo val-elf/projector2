@@ -1,0 +1,23 @@
+.layers-manager {
+    position: absolute;
+    left: 20px;
+    top: 300px;
+    display: block;
+    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    background-color: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(2px);
+    padding: 10px;
+
+    .add-layer {
+        cursor: pointer;
+        padding: 5px;
+        display: inline-block;
+    }
+
+    .remove-layer {
+        display: inline-block;
+        cursor: pointer;
+        margin-left: 10px;
+    }
+}

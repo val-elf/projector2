@@ -1,0 +1,13 @@
+:host {
+    display: inline-block;
+    .layer {
+        padding: 10px;
+        border-radius: 4px;
+        border: 1px solid rgba(0, 0, 0, 0);
+        &.is-active {
+            border: 1px solid rgba(215, 211, 255, 0.5);
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+            background-color: rgba(205, 221, 235, 0.5);
+        }
+    }
+}

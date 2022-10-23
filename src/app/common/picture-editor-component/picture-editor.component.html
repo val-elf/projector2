@@ -1,8 +1,16 @@
 <div #viewport class="viewport"></div>
 <div class="menu-button brush-switcher" (click)="toggleBrushMode()">{{ brushMode }}</div>
 <div class="menu-button log-switcher" (click)="toggleLogMode()">Log is: {{ logMode ? 'on' : 'off' }}</div>
-<app-color-selector
+<pe-color-selector
     class="color-selector"
     [color]="initialColor"
     (onChangeColor)="changeColor($event)"
-></app-color-selector>
+></pe-color-selector>
+<ng-container *ngIf="pictureEditor">
+    <pe-tool-panel>
+        <pe-brush-settings [editor]="pictureEditor" [brushTool]="brushTool"></pe-brush-settings>
+    </pe-tool-panel>
+    <pe-layers-manager
+        [editor]="pictureEditor"
+    ></pe-layers-manager>
+</ng-container>

@@ -1,0 +1,8 @@
+<div class="layers-manager" cdkDrag>
+    <div class="layers-controls">
+        <div class="add-layer" (click)="createNewLayer()">+</div>
+    </div>
+    <div *ngFor="let layer of layers">
+        <pe-layer [layer]="layer" (click)="selectLayer(layer)"></pe-layer> <span class="remove-layer" (click)="removeLayer(layer)">-</span>
+    </div>
+</div>

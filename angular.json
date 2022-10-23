@@ -21,7 +21,7 @@
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
-            "tsConfig": "./tsconfig.json",
+            "tsConfig": "./tsconfig.app.json",
             "assets": [
               "src/assets/img/favicon/favicon.png",
               "src/assets"
@@ -29,12 +29,20 @@
             "styles": [
               "src/styles/styles.scss"
             ],
+            "scripts": [
+              {
+                "input": "node_modules/picture-editor/build/worker.js",
+                "inject": false,
+                "bundleName": "picture-worker"
+              }
+            ],
             "vendorChunk": true,
             "extractLicenses": false,
             "buildOptimizer": false,
             "sourceMap": true,
             "optimization": false,
-            "namedChunks": true
+            "namedChunks": true,
+            "webWorkerTsConfig": "tsconfig.worker.json"
           },
           "configurations": {
             "production": {
@@ -95,7 +103,7 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": []
+            "webWorkerTsConfig": "tsconfig.worker.json"
           }
         },
         "lint": {

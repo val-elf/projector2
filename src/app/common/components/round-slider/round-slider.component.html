@@ -1,0 +1,12 @@
+<div class="round-slider" cdkDrag (cdkDragEnded)="endDrag($event)">
+    <div class="round-slider_drag-handle" cdkDragHandle></div>
+    <div class="round-slider_wrapper" (pointerdown)="startMove($event)">
+        <canvas [width]="diameter" [height]="diameter" #roundCircle roundCircle></canvas>
+    </div>
+    <ng-content></ng-content>
+    <svg width="0" height="0" xmlns="http://www.w3.org/2000/svg">
+        <clipPath id="roundCircle" clipPathUnits="objectBoundingBox">
+            <path [attr.d]="clipPath" />
+        </clipPath>
+    </svg>
+</div>

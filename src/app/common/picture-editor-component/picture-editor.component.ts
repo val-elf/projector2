@@ -2,14 +2,12 @@ import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, ChangeDetector
 import {
     BrushTool,
     FillBrush,
-    PanoramerTool,
     PictureEditor,
     StandardBrush,
     SampledTestBrush,
     TestBrush,
     EraserTool,
     IBrush,
-    ColorSelector,
     IRGBA
 } from 'picture-editor';
 import { runTests } from '../test';
@@ -26,13 +24,24 @@ export class PictureEditorComponent implements AfterViewInit, OnInit{
     public pictureEditor: PictureEditor;
 
     private brush: IBrush;
-    private brushTool: BrushTool;
-    public initialColor: IRGBA = { r: 155, g: 0, b: 0, a: 1 };
+    public brushTool: BrushTool;
+    public initialColor: IRGBA = { r: 0, g: 139, b: 5, a: 1 };
+    public brushMode = 'brush';
+    public logMode = false;
+
 
     constructor(
-        private element: ElementRef,
         private changeDetectorRef: ChangeDetectorRef
-    ) { }
+    ) {
+
+        if (typeof Worker !== 'undefined') {
+            // Create a new
+            // this.brushWorker = new Worker(new URL('~/app.worker', import.meta.url));
+          } else {
+            // Web Workers are not supported in this environment.
+            // You should add a fallback so that your program still executes correctly.
+          }
+    }
 
     ngOnInit() {
     }
@@ -48,7 +57,8 @@ export class PictureEditorComponent implements AfterViewInit, OnInit{
                 //width: 1000,
                 //height: 500,
                 zoom: 1,
-            }
+            },
+            workerScript: './picture-worker.js',
         });
 
         this.pictureEditor.setActiveTool(BrushTool);
@@ -56,10 +66,11 @@ export class PictureEditorComponent implements AfterViewInit, OnInit{
         this.changeDetectorRef.detectChanges();
 
         this.brushTool = this.pictureEditor.toolManager.getToolInstance<BrushTool>(BrushTool);
+        this.changeDetectorRef.detectChanges();
         this.brushTool.setPointsLog(this.logMode);
         const brush = new StandardBrush();
         const newBrush = new TestBrush(10, 0.2, 0.2);
-        const extendedBrush = new SampledTestBrush(10, 1, 0.5);
+        const extendedBrush = new SampledTestBrush(120, 0.01, 0.5);
         // extendedBrush.stepRatio = 0.1;
         const fillBrush = new FillBrush();
 
@@ -70,7 +81,7 @@ export class PictureEditorComponent implements AfterViewInit, OnInit{
 
         brush.setup({
             size: 120,
-            hardness: 0.3,
+            hardness: 1,
             opacity: 1,
             stepRatio: 0.1,
             flow: 0.2,
@@ -85,9 +96,6 @@ export class PictureEditorComponent implements AfterViewInit, OnInit{
         runTests(this.pictureEditor);
     }
 
-    brushMode = 'brush';
-    logMode = false;
-
     public changeColor(color: IRGBA) {
         this.pictureEditor?.setActiveColor(color);
         this.changeDetectorRef.detectChanges();
@@ -95,7 +103,6 @@ export class PictureEditorComponent implements AfterViewInit, OnInit{
 
     public toggleLogMode() {
         this.logMode = !this.logMode;
-        console.log('Toggle log mode', this.logMode);
         this.brushTool.setPointsLog(this.logMode);
     }
 
@@ -114,6 +121,4 @@ export class PictureEditorComponent implements AfterViewInit, OnInit{
                 break;
         }
     }
-
-
 }

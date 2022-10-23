@@ -2,7 +2,7 @@ import { Component, ElementRef, ViewChild, AfterViewInit, Output, EventEmitter, 
 import { areColorsEqual, ColorSelectorComponent as ColorSelector, IRGBA } from 'picture-editor';
 
 @Component({
-    selector: 'app-color-selector',
+    selector: 'pe-color-selector',
     templateUrl: './color-selector.component.html',
     styleUrls: ['./color-selector.component.scss'],
 })

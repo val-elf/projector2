@@ -1,0 +1,43 @@
+<div class="brush-icon">
+
+</div>
+<ui-round-slider
+    *ngIf="showHardnessSlider"
+    color="#009933"
+    [radius]="40"
+    [circleWidth]="10"
+    [min]="0.01"
+    [max]="1"
+    [(value)]="brushHardness"
+    (valueChange)="setBrushHardness()"
+></ui-round-slider>
+<ui-round-slider
+    *ngIf="showFlowSlider"
+    color="#FF6600"
+    [radius]="40"
+    [circleWidth]="10"
+    [min]="0.01"
+    [max]="1"
+    [(value)]="brushFlow"
+    (valueChange)="setBrushFlow()"
+></ui-round-slider>
+<ui-round-slider
+    *ngIf="showSizeSlider"
+    [radius]="40"
+    [circleWidth]="10"
+    [min]="1"
+    [max]="100"
+    [(value)]="brushSize"
+    (valueChange)="setBrushSize()"
+    (onValueSelect)="showBrushSizer()"
+    (onValueSelectEnd)="hideBrushSizer()"
+>
+    <div class="brush-sizer"
+        *ngIf="brushSizeShow"
+        [ngStyle]="{
+            height: brushSize + 'px',
+            width: brushSize + 'px',
+            backgroundColor: currentColor
+        }"
+    ></div>
+</ui-round-slider>
