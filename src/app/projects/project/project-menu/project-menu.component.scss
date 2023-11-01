@@ -1,0 +1,22 @@
+:host {
+    display: flex;
+    align-self: center;
+    justify-content: center;
+
+    .menu-item {
+        padding-right: 10px;
+        display: flex;
+        align-items: center;
+
+        &:not(:last-child) {
+            &::after {
+                content: '';
+                display: inline-block;
+                width: 1px;
+                height: 100%;
+                background-color: #ccc;
+                margin-left: 10px;
+            }
+        }
+    }
+}

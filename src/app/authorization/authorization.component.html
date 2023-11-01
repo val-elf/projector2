@@ -1,0 +1,10 @@
+<div>
+    Login form
+    <div [formGroup]="formGroup">
+        <input type="text" formControlName="login" />
+        <input type="text" formControlName="password" />
+    </div>
+    <div>
+        <button mat-button (click)="login()">Submit</button>
+    </div>
+</div>

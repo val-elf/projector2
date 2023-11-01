@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { autorun } from 'mobx';
 import {
     BrushTool,
     FillBrush,
@@ -8,9 +9,10 @@ import {
     TestBrush,
     EraserTool,
     IBrush,
-    IRGBA
+    IRGBA,
 } from 'picture-editor';
 import { runTests } from '../test';
+import { KeyController } from './key-controller/key.controller';
 import { mockLayers } from './layers-mock';
 
 @Component({
@@ -29,6 +31,7 @@ export class PictureEditorComponent implements AfterViewInit, OnInit{
     public brushMode = 'brush';
     public logMode = false;
 
+    private keyController!: KeyController;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef
@@ -50,8 +53,8 @@ export class PictureEditorComponent implements AfterViewInit, OnInit{
         this.pictureEditor = new PictureEditor({
             placeholder: this.viewPort.nativeElement,
             documentConfig: {
-                width: 3000,
-                height: 2000,
+                width: 2000,
+                height: 1200,
             },
             viewportConfig: {
                 //width: 1000,
@@ -59,6 +62,14 @@ export class PictureEditorComponent implements AfterViewInit, OnInit{
                 zoom: 1,
             },
             workerScript: './picture-worker.js',
+        });
+
+        this.keyController = new KeyController(this.pictureEditor, this.viewPort.nativeElement);
+        this.pictureEditor.viewport.window.addEventListener('wheel', (evt: WheelEvent) => {
+            const direction = evt.deltaY < 0;
+            const position = { x: evt.pageX, y: evt.pageY };
+            console.log('Position', position);
+            this.pictureEditor.page.setZoom(position, direction);
         });
 
         this.pictureEditor.setActiveTool(BrushTool);
@@ -69,10 +80,15 @@ export class PictureEditorComponent implements AfterViewInit, OnInit{
         this.changeDetectorRef.detectChanges();
         this.brushTool.setPointsLog(this.logMode);
         const brush = new StandardBrush();
-        const newBrush = new TestBrush(10, 0.2, 0.2);
+        // const newBrush = new TestBrush(10, 0.2, 0.2);
         const extendedBrush = new SampledTestBrush(120, 0.01, 0.5);
         // extendedBrush.stepRatio = 0.1;
-        const fillBrush = new FillBrush();
+        // const fillBrush = new FillBrush();
+
+        // const colorPickerTool = this.pictureEditor.toolManager.getToolInstance<ColorPickerTool>(ColorPickerTool);
+        autorun(() => {
+            this.initialColor = this.pictureEditor.activeColor;
+        });
 
         // this.brush = brush;
         // this.brush = newBrush;

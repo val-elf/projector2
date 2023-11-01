@@ -1,0 +1,10 @@
+<div class="page-header">
+    <div>
+        <h1 [routerLink]="['.']" [ngClass]="{ link: !isActive }">{{ project.name }}</h1>
+        <xng-breadcrumb separator=">"></xng-breadcrumb>
+    </div>
+    <app-project-menu></app-project-menu>
+    <app-user-profile></app-user-profile>
+    <app-preview [owner]="project" [type]="circle"></app-preview>
+</div>
+<router-outlet></router-outlet>

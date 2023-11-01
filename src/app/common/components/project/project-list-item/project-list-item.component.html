@@ -1,0 +1,34 @@
+<div class="item" #mainContainer>
+    <div class="item-background" [ngStyle]="{
+            backgroundImage: backgroundUrl
+    }"></div>
+    <div class="content-place">
+        <div class="project-icon-place">
+            <app-preview
+                [owner]="project"
+                [expandable]="true"
+                [type]="circle"
+                (setPreviewUrl)="setProjectIconUrl($event)"
+            ></app-preview>
+            <div class="created">{{ 'APP_PROJECT_CREATED' | translate }}:</div>
+            <div class="date" title="{date(project.create && project.create.dt || '')}">
+                {{ project._create && project._create._dt | date }}
+            </div>
+        </div>
+        <div class="info">
+            <div class="header">
+                <span [routerLink]="['/projects', project._id]" class="link">
+                    {{ project.name }}
+                </span>
+                <span class="icon16 edit" onClick="{() => this.editProject(project)}"></span>
+            </div>
+            <div class="comments" *ngIf="!!project.description">
+                {{ project.description }}
+            </div>
+        </div>
+        <!-- div class="hover-buttons">
+            <Button class="btn green mbxs"><span class="copy-icon"></span> <span class="capital">{ t('APP_COPY') }</span></Button>
+            <Button class="btn delete"><span class="delete-icon"></span> <span class="capital">{ t('APP_DELETE') }</span></Button>
+        </div -->
+    </div>
+</div>

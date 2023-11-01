@@ -1,0 +1,16 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ff000035;
+    height: 100%;
+}
+.project-dashboard {
+    display: grid;
+    grid-template-columns: max-content 1fr min-content;
+    grid-template-rows: 1fr max-content;
+    grid-template-areas:
+        "ld sch stck"
+        "ld msg stck"
+    ;
+    height: 100%;
+}

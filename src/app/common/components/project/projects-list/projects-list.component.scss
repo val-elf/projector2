@@ -1,0 +1,14 @@
+@import "/src/styles/spacings.scss";
+@import "/src/styles/colors.scss";
+
+:host {
+  display: flex;
+  min-height: 0;
+}
+
+.list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(450px, 23%));
+  grid-auto-rows: 160px;
+  gap: 20px;
+}

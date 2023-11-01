@@ -1,0 +1,62 @@
+@import './colors.scss';
+@import './spacings.scss';
+
+.list {
+	.item {
+		margin-bottom: $_xs;
+		padding: $_xs $_s;
+		border-radius: $_xs;
+		transition: max-width .3s ease, max-height .3s;
+		.highlight {
+			background-color: $blue-color;
+			color: white;
+		}
+		&.selected {
+			position: relative;
+		}
+		&.vmiddle {
+			align-items: center;
+		}
+	}
+	&:not(.tree-list) {
+		.item {
+			&.selected {
+				&:after {
+					content: '';
+					position: absolute;
+					left: 0;
+					top: 0;
+					width: 100%;
+					height: 100%;
+					background-color: $blue-color;
+					border-radius: $_xs;
+					opacity: 0.3;
+					pointer-events: none;
+				}
+				box-shadow: 0 0 $_xs $shadow-color;
+			}
+		}
+	}
+
+	&.tree-list{
+		.list{
+			margin-bottom: $_xs;
+		}
+		.item {
+			background-color: transparent;
+			border-width: 0;
+			box-shadow: none;
+		}
+	}
+
+	&.hovered{
+		padding: $_xs;
+		.item{
+			&:hover{
+				background-color: $hover-color;
+				box-shadow: 0 0 $_xs $shadow-color;
+				overflow: hidden;
+			}
+		}
+	}
+}

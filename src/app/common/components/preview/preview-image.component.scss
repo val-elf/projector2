@@ -1,0 +1,46 @@
+@import '/src/styles/colors.scss';
+@import '/src/styles/spacings.scss';
+
+:host {
+    display: inline-flex;
+    width: 75px;
+    height: 90px;
+    overflow: hidden;
+    position: relative;
+    border-radius: $_xs;
+    background-repeat: no-repeat;
+    background-position: 50% 0;
+    background-size: cover;
+    vertical-align: top;
+    transition: border-radius .5s, height .3s, margin-bottom .3s;
+    flex-shrink: 0;
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.2);
+
+	&.circle {
+		border-radius: 100%;
+        height: 75px;
+        .preview-image {
+            background-position-y: 0;
+        }
+	}
+
+    &.expandable {
+        position: relative;
+        .preview-image {
+            background-position: 50% 0;
+        }
+    }
+
+    &.expanded {
+        max-height: none !important;
+        z-index: 1001;
+        border-radius: $_xs;
+    }
+
+    .preview {
+        width: 100%;
+        height: 100%;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+}

@@ -1,0 +1,18 @@
+@import 'colors.scss';
+
+@mixin active {
+    cursor: pointer;
+}
+
+@mixin link {
+    @include active;
+    color: $link-color;
+    text-decoration: none;
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.link {
+    @include link();
+}

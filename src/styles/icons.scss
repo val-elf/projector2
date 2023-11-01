@@ -1,0 +1,307 @@
+@import 'base.scss';
+
+$iconssrc: '/assets/img/icons.png';
+$iconssrc16: '/assets/img/icons-16.png';
+$filetypesrc: '/assets/img/ft-icons.png';
+$ix: -16px;
+$is: -32px;
+$if: -55px;
+
+@mixin icon-base() {
+    display: inline-block;
+    background: url($iconssrc) no-repeat;
+    vertical-align: middle;
+}
+
+.icon-base {
+    @include icon-base();
+}
+
+@mixin iconic() {
+	@include icon-base();
+	width: -$is;
+	height: -$is;
+	min-width: -$is;
+	min-height: -$is;
+}
+
+@mixin iconic16() {
+	@include icon-base();
+	background: url($iconssrc16) no-repeat;
+	min-width: -$ix;
+	min-height: -$ix;
+	width: -$ix;
+	height: -$ix;
+}
+
+[class^="icon-"],
+[class*="icon-"] {
+	display: inline-block;
+	position: relative;
+	color: #339900;
+}
+
+[class^="icon-"]:after {
+	font-family: 'projector';
+	position: absolute;
+	left: 0;
+	opacity: 0.5;
+}
+
+[class^="icon-"]:before {
+	position:relative;
+	top:0;
+}
+
+[class$="half"] {
+	position: absolute;
+	left: 0;
+	opacity: 0.5;
+}
+
+[class$="half"]:before {
+	position: absolute;
+}
+
+[class$="full"]:after {
+	line-height: 1;
+}
+
+
+.icon {
+	@include iconic();
+
+    &.expand{
+		@include active();
+		background-position: 0 12 * $is;
+	}
+
+	&.collapse{
+		@include active();
+		background-position: 0 13 * $is;
+	}
+
+	&.vmiddle{
+		white-space: nowrap;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	&.fullscreen {
+		@include active();
+		background-position: 0 14 * $is;
+	}
+
+	&.pane {
+		@include active();
+		background-position: 0 15 * $is;
+	}
+
+	&.pen {
+		@include active();
+		background-position: 0 16 * $is;
+	}
+	&.delete{
+		@include active();
+		background-position: 0 17 * $is;
+	}
+
+	&-pencil-full {
+		&:before { content: 'A'; }
+		&:after { content: 'a'; }
+	}
+
+	&-hand-full {
+		&:before { content: 'B'; }
+		&:after { content: 'b'; }
+	}
+
+	&-pen-full {
+		&:before { content: 'C'; }
+		&:after { content: 'c'; }
+	}
+
+	&-newitem-full {
+		&:before { content: 'D'; }
+		&:after { content: 'd'; }
+	}
+
+	&-city-full {
+		&:before { content: 'E'; }
+		&:after { content: 'e'; }
+	}
+
+	&-geopoint-full {
+		&:before { content: 'F'; }
+		&:after { content: 'f'; }
+	}
+}
+
+.text-edited-icon {
+	@include iconic();
+	@include active();
+	background-position: 0 0;
+}
+
+.add-item-icon{
+	@include iconic();
+	@include active();
+	background-position: 0 $is;
+}
+
+.project-icon{
+	@include iconic();
+	@include active();
+	background-position: 0 $is * 2;
+}
+
+.search-icon{
+	@include iconic();
+	background-position: 0 $is * 3;
+}
+
+.copy-icon{
+	@include iconic();
+	@include active();
+	background-position: 0 $is * 4;
+}
+
+.delete-icon{
+	@include iconic();
+	@include active();
+	background-position: 0 $is * 5;
+}
+
+.close-icon {
+	@include iconic();
+	@include active();
+	background-position: 0 $is * 11;
+}
+
+
+
+/* ---------------------------- 16x16 icons ------------------------*/
+
+.icon16{
+	@include iconic16();
+	background-position: 0 -$ix;
+
+	&.hovered{
+		transition: opacity 1s;
+		opacity: 0;
+		&:hover{
+			opacity: 1;
+		}
+	}
+	&.locker{
+		@include active();
+		background-position: 0 $ix * 4;
+		&.unlocked{
+			background-position: 0 $ix * 5;
+			opacity: 0.1;
+			transition: opacity 1s;
+			&:hover{
+				opacity: 1;
+			}
+		}
+	}
+
+	&.btn{
+		margin-right: 1em;
+	}
+
+	&.popup{
+		@include active();
+		background-position: 0 $ix * 6;
+	}
+
+	&.edit{
+		@include active();
+		background-position: 0 0;
+	}
+
+	&.delete{
+		@include active();
+		background-position: 0 $ix * 3;
+	}
+
+	&.add{
+		@include active();
+		background-position: 0 $ix * 7;
+	}
+
+	&.bold{
+		background-position: 0 $ix * 9;
+	}
+
+	&.italic{
+		background-position: 0 $ix * 10;
+	}
+
+	&.underline{
+		background-position: 0 $ix * 11;
+	}
+
+	&.align-left{
+		background-position: 0 $ix * 12;
+	}
+
+	&.align-center{
+		background-position: 0 $ix * 13;
+	}
+
+	&.align-right{
+		background-position: 0 $ix * 14;
+	}
+
+	&.align-justify{
+		background-position: 0 $ix * 15;
+	}
+
+	&.unordered-list{
+		background-position: 0 $ix * 17;
+	}
+
+	&.ordered-list{
+		background-position: 0 $ix * 18;
+	}
+
+	&.remove{
+		@include active();
+		background-position: 0 $ix * 19;
+	}
+
+	&.left-arrow {
+		@include active();
+		background-position: 0 $ix * 20;
+	}
+
+	&.right-arrow {
+		@include active();
+		background-position: 0 $ix * 21;
+	}
+
+	&.checked {
+		background-position: 0 $ix * 22;
+	}
+
+	&.upload {
+		background-position: 0 $ix * 23;
+	}
+
+	&.start {
+		background-position: 0 $ix * 24;
+	}
+
+	&.document {
+		background-position: 0 $ix * 25;
+	}
+
+}
+
+.icon {
+    &-projects {
+        background-image: url('/assets/img/projects/default.png');
+    }
+}

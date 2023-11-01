@@ -1,5 +1,12 @@
 @import 'picture-editor/build/index.css';
 @import 'material-theme.scss';
+@import 'spacings.scss';
+@import 'glyphicons.scss';
+@import 'icons.scss';
+@import 'fonts.scss';
+@import 'grid.scss';
+@import 'list.scss';
+@import 'breadcrumbs.scss';
 
 * {
     -webkit-user-drag: none;
@@ -11,7 +18,19 @@ html, body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+* {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
     padding: 0;
+}
+
+h1, h2, h3, h4 {
+    margin: 0;
+}
+
+router-outlet {
+    display: none;
 }

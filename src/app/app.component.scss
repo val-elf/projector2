@@ -1,0 +1,24 @@
+@import '/src/styles/colors.scss';
+@import '/src/styles/base.scss';
+
+::ng-deep {
+    .xng-breadcrumb-item {
+        .xng-breadcrumb-link {
+            @include link();
+        }
+
+        .xng-breadcrumb-trail {
+            font-weight: 600;
+            color: $heading-color;
+        }
+    }
+
+    .xng-breadcrumb-list {
+        font-size: 0.9em;
+
+        .xng-breadcrumb-separator {
+            margin-left: 2px;
+            margin-right: 2px;
+        }
+    }
+}

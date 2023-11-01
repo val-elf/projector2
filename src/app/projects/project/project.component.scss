@@ -1,0 +1,18 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.page-header {
+    display: grid;
+    grid-template-columns: max-content 1fr min-content min-content;
+    grid-column-gap: 20px;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+app-user-profile {
+    align-self: center;
+}
