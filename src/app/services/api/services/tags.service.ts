@@ -9,6 +9,8 @@ import { RequestBuilder } from '../request-builder';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
+import { IDbObject } from '../models/i-db-object';
+import { ITag } from '../models/i-tag';
 
 
 /**
@@ -39,8 +41,12 @@ export class TagsService extends BaseService {
    * This method doesn't expect any request body.
    */
   getProjectTags$Response(params: {
+
+    /**
+     * Project ID
+     */
     projectId: string;
-  }): Observable<StrictHttpResponse<void>> {
+  }): Observable<StrictHttpResponse<Array<ITag>>> {
 
     const rb = new RequestBuilder(this.rootUrl, TagsService.GetProjectTagsPath, 'get');
     if (params) {
@@ -53,7 +59,7 @@ export class TagsService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+        return r as StrictHttpResponse<Array<ITag>>;
       })
     );
   }
@@ -67,11 +73,15 @@ export class TagsService extends BaseService {
    * This method doesn't expect any request body.
    */
   getProjectTags(params: {
+
+    /**
+     * Project ID
+     */
     projectId: string;
-  }): Observable<void> {
+  }): Observable<Array<ITag>> {
 
     return this.getProjectTags$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+      map((r: StrictHttpResponse<Array<ITag>>) => r.body as Array<ITag>)
     );
   }
 
@@ -89,8 +99,12 @@ export class TagsService extends BaseService {
    * This method doesn't expect any request body.
    */
   getObjectTags$Response(params: {
+
+    /**
+     * Object ID
+     */
     objectId: string;
-  }): Observable<StrictHttpResponse<void>> {
+  }): Observable<StrictHttpResponse<Array<string>>> {
 
     const rb = new RequestBuilder(this.rootUrl, TagsService.GetObjectTagsPath, 'get');
     if (params) {
@@ -103,7 +117,7 @@ export class TagsService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+        return r as StrictHttpResponse<Array<string>>;
       })
     );
   }
@@ -117,11 +131,15 @@ export class TagsService extends BaseService {
    * This method doesn't expect any request body.
    */
   getObjectTags(params: {
+
+    /**
+     * Object ID
+     */
     objectId: string;
-  }): Observable<void> {
+  }): Observable<Array<string>> {
 
     return this.getObjectTags$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+      map((r: StrictHttpResponse<Array<string>>) => r.body as Array<string>)
     );
   }
 
@@ -139,8 +157,12 @@ export class TagsService extends BaseService {
    * This method doesn't expect any request body.
    */
   searchObjectsByTags$Response(params: {
+
+    /**
+     * Project ID
+     */
     projectId: string;
-  }): Observable<StrictHttpResponse<void>> {
+  }): Observable<StrictHttpResponse<Array<IDbObject>>> {
 
     const rb = new RequestBuilder(this.rootUrl, TagsService.SearchObjectsByTagsPath, 'get');
     if (params) {
@@ -153,7 +175,7 @@ export class TagsService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+        return r as StrictHttpResponse<Array<IDbObject>>;
       })
     );
   }
@@ -167,11 +189,15 @@ export class TagsService extends BaseService {
    * This method doesn't expect any request body.
    */
   searchObjectsByTags(params: {
+
+    /**
+     * Project ID
+     */
     projectId: string;
-  }): Observable<void> {
+  }): Observable<Array<IDbObject>> {
 
     return this.searchObjectsByTags$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+      map((r: StrictHttpResponse<Array<IDbObject>>) => r.body as Array<IDbObject>)
     );
   }
 

@@ -9,6 +9,7 @@ import { RequestBuilder } from '../request-builder';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
+import { IDbObject } from '../models/i-db-object';
 
 
 /**
@@ -39,8 +40,12 @@ export class DbObjectsService extends BaseService {
    * This method doesn't expect any request body.
    */
   getObject$Response(params: {
+
+    /**
+     * Id of object
+     */
     objectId: string;
-  }): Observable<StrictHttpResponse<void>> {
+  }): Observable<StrictHttpResponse<IDbObject>> {
 
     const rb = new RequestBuilder(this.rootUrl, DbObjectsService.GetObjectPath, 'get');
     if (params) {
@@ -53,7 +58,7 @@ export class DbObjectsService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+        return r as StrictHttpResponse<IDbObject>;
       })
     );
   }
@@ -67,11 +72,15 @@ export class DbObjectsService extends BaseService {
    * This method doesn't expect any request body.
    */
   getObject(params: {
+
+    /**
+     * Id of object
+     */
     objectId: string;
-  }): Observable<void> {
+  }): Observable<IDbObject> {
 
     return this.getObject$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+      map((r: StrictHttpResponse<IDbObject>) => r.body as IDbObject)
     );
   }
 
@@ -89,9 +98,17 @@ export class DbObjectsService extends BaseService {
    * This method doesn't expect any request body.
    */
   getObjectPreviewByType$Response(params: {
+
+    /**
+     * Id of object
+     */
     objectId: string;
+
+    /**
+     * Type of object
+     */
     type: string;
-  }): Observable<StrictHttpResponse<void>> {
+  }): Observable<StrictHttpResponse<'null'>> {
 
     const rb = new RequestBuilder(this.rootUrl, DbObjectsService.GetObjectPreviewByTypePath, 'get');
     if (params) {
@@ -105,7 +122,7 @@ export class DbObjectsService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+        return r as StrictHttpResponse<'null'>;
       })
     );
   }
@@ -119,12 +136,20 @@ export class DbObjectsService extends BaseService {
    * This method doesn't expect any request body.
    */
   getObjectPreviewByType(params: {
+
+    /**
+     * Id of object
+     */
     objectId: string;
+
+    /**
+     * Type of object
+     */
     type: string;
-  }): Observable<void> {
+  }): Observable<'null'> {
 
     return this.getObjectPreviewByType$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+      map((r: StrictHttpResponse<'null'>) => r.body as 'null')
     );
   }
 
@@ -142,8 +167,12 @@ export class DbObjectsService extends BaseService {
    * This method doesn't expect any request body.
    */
   getObjectPreview$Response(params: {
+
+    /**
+     * Id of object
+     */
     objectId: string;
-  }): Observable<StrictHttpResponse<void>> {
+  }): Observable<StrictHttpResponse<'null'>> {
 
     const rb = new RequestBuilder(this.rootUrl, DbObjectsService.GetObjectPreviewPath, 'get');
     if (params) {
@@ -156,7 +185,7 @@ export class DbObjectsService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+        return r as StrictHttpResponse<'null'>;
       })
     );
   }
@@ -170,11 +199,15 @@ export class DbObjectsService extends BaseService {
    * This method doesn't expect any request body.
    */
   getObjectPreview(params: {
+
+    /**
+     * Id of object
+     */
     objectId: string;
-  }): Observable<void> {
+  }): Observable<'null'> {
 
     return this.getObjectPreview$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+      map((r: StrictHttpResponse<'null'>) => r.body as 'null')
     );
   }
 

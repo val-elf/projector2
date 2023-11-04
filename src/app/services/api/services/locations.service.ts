@@ -9,6 +9,8 @@ import { RequestBuilder } from '../request-builder';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
+import { IInitLocation } from '../models/i-init-location';
+import { ILocation } from '../models/i-location';
 
 
 /**
@@ -39,8 +41,12 @@ export class LocationsService extends BaseService {
    * This method doesn't expect any request body.
    */
   getLocationsList$Response(params: {
+
+    /**
+     * Project ID
+     */
     projectId: string;
-  }): Observable<StrictHttpResponse<void>> {
+  }): Observable<StrictHttpResponse<Array<ILocation>>> {
 
     const rb = new RequestBuilder(this.rootUrl, LocationsService.GetLocationsListPath, 'get');
     if (params) {
@@ -53,7 +59,7 @@ export class LocationsService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+        return r as StrictHttpResponse<Array<ILocation>>;
       })
     );
   }
@@ -67,11 +73,15 @@ export class LocationsService extends BaseService {
    * This method doesn't expect any request body.
    */
   getLocationsList(params: {
+
+    /**
+     * Project ID
+     */
     projectId: string;
-  }): Observable<void> {
+  }): Observable<Array<ILocation>> {
 
     return this.getLocationsList$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+      map((r: StrictHttpResponse<Array<ILocation>>) => r.body as Array<ILocation>)
     );
   }
 
@@ -86,15 +96,21 @@ export class LocationsService extends BaseService {
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `createLocation()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   createLocation$Response(params: {
+
+    /**
+     * Project ID
+     */
     projectId: string;
-  }): Observable<StrictHttpResponse<void>> {
+    body?: IInitLocation
+  }): Observable<StrictHttpResponse<ILocation>> {
 
     const rb = new RequestBuilder(this.rootUrl, LocationsService.CreateLocationPath, 'post');
     if (params) {
       rb.path('projectId', params.projectId, {});
+      rb.body(params.body, 'application/json');
     }
 
     return this.http.request(rb.build({
@@ -103,7 +119,7 @@ export class LocationsService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+        return r as StrictHttpResponse<ILocation>;
       })
     );
   }
@@ -114,21 +130,26 @@ export class LocationsService extends BaseService {
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `createLocation$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   createLocation(params: {
+
+    /**
+     * Project ID
+     */
     projectId: string;
-  }): Observable<void> {
+    body?: IInitLocation
+  }): Observable<ILocation> {
 
     return this.createLocation$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+      map((r: StrictHttpResponse<ILocation>) => r.body as ILocation)
     );
   }
 
   /**
    * Path part for operation getLocationItem
    */
-  static readonly GetLocationItemPath = '/locations/{location}';
+  static readonly GetLocationItemPath = '/locations/{locationId}';
 
   /**
    * Get location by its ID
@@ -139,12 +160,16 @@ export class LocationsService extends BaseService {
    * This method doesn't expect any request body.
    */
   getLocationItem$Response(params: {
-    location: string;
-  }): Observable<StrictHttpResponse<void>> {
+
+    /**
+     * Id of Location
+     */
+    locationId: string;
+  }): Observable<StrictHttpResponse<ILocation>> {
 
     const rb = new RequestBuilder(this.rootUrl, LocationsService.GetLocationItemPath, 'get');
     if (params) {
-      rb.path('location', params.location, {});
+      rb.path('locationId', params.locationId, {});
     }
 
     return this.http.request(rb.build({
@@ -153,7 +178,7 @@ export class LocationsService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+        return r as StrictHttpResponse<ILocation>;
       })
     );
   }
@@ -167,11 +192,15 @@ export class LocationsService extends BaseService {
    * This method doesn't expect any request body.
    */
   getLocationItem(params: {
-    location: string;
-  }): Observable<void> {
+
+    /**
+     * Id of Location
+     */
+    locationId: string;
+  }): Observable<ILocation> {
 
     return this.getLocationItem$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+      map((r: StrictHttpResponse<ILocation>) => r.body as ILocation)
     );
   }
 
@@ -186,15 +215,21 @@ export class LocationsService extends BaseService {
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `updateLocation()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   updateLocation$Response(params: {
+
+    /**
+     * Id of Location
+     */
     locationId: string;
-  }): Observable<StrictHttpResponse<void>> {
+    body?: IInitLocation
+  }): Observable<StrictHttpResponse<ILocation>> {
 
     const rb = new RequestBuilder(this.rootUrl, LocationsService.UpdateLocationPath, 'put');
     if (params) {
       rb.path('locationId', params.locationId, {});
+      rb.body(params.body, 'application/json');
     }
 
     return this.http.request(rb.build({
@@ -203,7 +238,7 @@ export class LocationsService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+        return r as StrictHttpResponse<ILocation>;
       })
     );
   }
@@ -214,14 +249,19 @@ export class LocationsService extends BaseService {
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `updateLocation$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   updateLocation(params: {
+
+    /**
+     * Id of Location
+     */
     locationId: string;
-  }): Observable<void> {
+    body?: IInitLocation
+  }): Observable<ILocation> {
 
     return this.updateLocation$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+      map((r: StrictHttpResponse<ILocation>) => r.body as ILocation)
     );
   }
 
@@ -239,8 +279,14 @@ export class LocationsService extends BaseService {
    * This method doesn't expect any request body.
    */
   deleteLocation$Response(params: {
+
+    /**
+     * Id of Location
+     */
     locationId: string;
-  }): Observable<StrictHttpResponse<void>> {
+  }): Observable<StrictHttpResponse<{
+'deleted'?: boolean;
+}>> {
 
     const rb = new RequestBuilder(this.rootUrl, LocationsService.DeleteLocationPath, 'delete');
     if (params) {
@@ -253,7 +299,9 @@ export class LocationsService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+        return r as StrictHttpResponse<{
+        'deleted'?: boolean;
+        }>;
       })
     );
   }
@@ -267,11 +315,21 @@ export class LocationsService extends BaseService {
    * This method doesn't expect any request body.
    */
   deleteLocation(params: {
+
+    /**
+     * Id of Location
+     */
     locationId: string;
-  }): Observable<void> {
+  }): Observable<{
+'deleted'?: boolean;
+}> {
 
     return this.deleteLocation$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+      map((r: StrictHttpResponse<{
+'deleted'?: boolean;
+}>) => r.body as {
+'deleted'?: boolean;
+})
     );
   }
 

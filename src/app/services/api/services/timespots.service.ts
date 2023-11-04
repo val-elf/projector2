@@ -9,6 +9,8 @@ import { RequestBuilder } from '../request-builder';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
+import { IInitTimespot } from '../models/i-init-timespot';
+import { ITimespot } from '../models/i-timespot';
 
 
 /**
@@ -36,15 +38,21 @@ export class TimespotsService extends BaseService {
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `updateTimespot()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   updateTimespot$Response(params: {
+
+    /**
+     * Timespot ID
+     */
     timespotId: string;
-  }): Observable<StrictHttpResponse<void>> {
+    body?: IInitTimespot
+  }): Observable<StrictHttpResponse<ITimespot>> {
 
     const rb = new RequestBuilder(this.rootUrl, TimespotsService.UpdateTimespotPath, 'put');
     if (params) {
       rb.path('timespotId', params.timespotId, {});
+      rb.body(params.body, 'application/json');
     }
 
     return this.http.request(rb.build({
@@ -53,7 +61,7 @@ export class TimespotsService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+        return r as StrictHttpResponse<ITimespot>;
       })
     );
   }
@@ -64,14 +72,19 @@ export class TimespotsService extends BaseService {
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `updateTimespot$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   updateTimespot(params: {
+
+    /**
+     * Timespot ID
+     */
     timespotId: string;
-  }): Observable<void> {
+    body?: IInitTimespot
+  }): Observable<ITimespot> {
 
     return this.updateTimespot$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+      map((r: StrictHttpResponse<ITimespot>) => r.body as ITimespot)
     );
   }
 
@@ -89,8 +102,14 @@ export class TimespotsService extends BaseService {
    * This method doesn't expect any request body.
    */
   deleteTimespot$Response(params: {
+
+    /**
+     * Timespot ID
+     */
     timespotId: string;
-  }): Observable<StrictHttpResponse<void>> {
+  }): Observable<StrictHttpResponse<{
+'delete'?: boolean;
+}>> {
 
     const rb = new RequestBuilder(this.rootUrl, TimespotsService.DeleteTimespotPath, 'delete');
     if (params) {
@@ -103,7 +122,9 @@ export class TimespotsService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+        return r as StrictHttpResponse<{
+        'delete'?: boolean;
+        }>;
       })
     );
   }
@@ -117,11 +138,21 @@ export class TimespotsService extends BaseService {
    * This method doesn't expect any request body.
    */
   deleteTimespot(params: {
+
+    /**
+     * Timespot ID
+     */
     timespotId: string;
-  }): Observable<void> {
+  }): Observable<{
+'delete'?: boolean;
+}> {
 
     return this.deleteTimespot$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+      map((r: StrictHttpResponse<{
+'delete'?: boolean;
+}>) => r.body as {
+'delete'?: boolean;
+})
     );
   }
 
@@ -136,15 +167,21 @@ export class TimespotsService extends BaseService {
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `createTimespot()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   createTimespot$Response(params: {
+
+    /**
+     * Timeline ID
+     */
     timelineId: string;
-  }): Observable<StrictHttpResponse<void>> {
+    body?: IInitTimespot
+  }): Observable<StrictHttpResponse<ITimespot>> {
 
     const rb = new RequestBuilder(this.rootUrl, TimespotsService.CreateTimespotPath, 'post');
     if (params) {
       rb.path('timelineId', params.timelineId, {});
+      rb.body(params.body, 'application/json');
     }
 
     return this.http.request(rb.build({
@@ -153,7 +190,7 @@ export class TimespotsService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+        return r as StrictHttpResponse<ITimespot>;
       })
     );
   }
@@ -164,14 +201,19 @@ export class TimespotsService extends BaseService {
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `createTimespot$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   createTimespot(params: {
+
+    /**
+     * Timeline ID
+     */
     timelineId: string;
-  }): Observable<void> {
+    body?: IInitTimespot
+  }): Observable<ITimespot> {
 
     return this.createTimespot$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+      map((r: StrictHttpResponse<ITimespot>) => r.body as ITimespot)
     );
   }
 

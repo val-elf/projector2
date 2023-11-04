@@ -9,6 +9,8 @@ import { RequestBuilder } from '../request-builder';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
+import { IFile } from '../models/i-file';
+import { IFileStatus } from '../models/i-file-status';
 
 
 /**
@@ -36,13 +38,16 @@ export class FilesService extends BaseService {
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `upload()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
    */
   upload$Response(params?: {
-  }): Observable<StrictHttpResponse<void>> {
+    body?: {
+}
+  }): Observable<StrictHttpResponse<IFile>> {
 
     const rb = new RequestBuilder(this.rootUrl, FilesService.UploadPath, 'post');
     if (params) {
+      rb.body(params.body, 'multipart/form-data');
     }
 
     return this.http.request(rb.build({
@@ -51,7 +56,7 @@ export class FilesService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+        return r as StrictHttpResponse<IFile>;
       })
     );
   }
@@ -62,13 +67,15 @@ export class FilesService extends BaseService {
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `upload$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
    */
   upload(params?: {
-  }): Observable<void> {
+    body?: {
+}
+  }): Observable<IFile> {
 
     return this.upload$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+      map((r: StrictHttpResponse<IFile>) => r.body as IFile)
     );
   }
 
@@ -86,8 +93,12 @@ export class FilesService extends BaseService {
    * This method doesn't expect any request body.
    */
   getTranscoderStatus$Response(params: {
+
+    /**
+     * Id of the file
+     */
     fileId: string;
-  }): Observable<StrictHttpResponse<void>> {
+  }): Observable<StrictHttpResponse<IFileStatus>> {
 
     const rb = new RequestBuilder(this.rootUrl, FilesService.GetTranscoderStatusPath, 'get');
     if (params) {
@@ -100,7 +111,7 @@ export class FilesService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+        return r as StrictHttpResponse<IFileStatus>;
       })
     );
   }
@@ -114,11 +125,15 @@ export class FilesService extends BaseService {
    * This method doesn't expect any request body.
    */
   getTranscoderStatus(params: {
+
+    /**
+     * Id of the file
+     */
     fileId: string;
-  }): Observable<void> {
+  }): Observable<IFileStatus> {
 
     return this.getTranscoderStatus$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+      map((r: StrictHttpResponse<IFileStatus>) => r.body as IFileStatus)
     );
   }
 
@@ -136,8 +151,14 @@ export class FilesService extends BaseService {
    * This method doesn't expect any request body.
    */
   deleteFile$Response(params: {
+
+    /**
+     * Id of the deleted file
+     */
     fileId: string;
-  }): Observable<StrictHttpResponse<void>> {
+  }): Observable<StrictHttpResponse<{
+'deleted'?: boolean;
+}>> {
 
     const rb = new RequestBuilder(this.rootUrl, FilesService.DeleteFilePath, 'delete');
     if (params) {
@@ -150,7 +171,9 @@ export class FilesService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+        return r as StrictHttpResponse<{
+        'deleted'?: boolean;
+        }>;
       })
     );
   }
@@ -164,11 +187,21 @@ export class FilesService extends BaseService {
    * This method doesn't expect any request body.
    */
   deleteFile(params: {
+
+    /**
+     * Id of the deleted file
+     */
     fileId: string;
-  }): Observable<void> {
+  }): Observable<{
+'deleted'?: boolean;
+}> {
 
     return this.deleteFile$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+      map((r: StrictHttpResponse<{
+'deleted'?: boolean;
+}>) => r.body as {
+'deleted'?: boolean;
+})
     );
   }
 
@@ -186,8 +219,12 @@ export class FilesService extends BaseService {
    * This method doesn't expect any request body.
    */
   getFileInfo$Response(params: {
+
+    /**
+     * Id of the deleted file
+     */
     fileId: string;
-  }): Observable<StrictHttpResponse<void>> {
+  }): Observable<StrictHttpResponse<IFile>> {
 
     const rb = new RequestBuilder(this.rootUrl, FilesService.GetFileInfoPath, 'get');
     if (params) {
@@ -200,7 +237,7 @@ export class FilesService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+        return r as StrictHttpResponse<IFile>;
       })
     );
   }
@@ -214,11 +251,15 @@ export class FilesService extends BaseService {
    * This method doesn't expect any request body.
    */
   getFileInfo(params: {
+
+    /**
+     * Id of the deleted file
+     */
     fileId: string;
-  }): Observable<void> {
+  }): Observable<IFile> {
 
     return this.getFileInfo$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+      map((r: StrictHttpResponse<IFile>) => r.body as IFile)
     );
   }
 
@@ -236,6 +277,10 @@ export class FilesService extends BaseService {
    * This method doesn't expect any request body.
    */
   downloadFile$Response(params: {
+
+    /**
+     * Id of the deleted file
+     */
     fileId: string;
   }): Observable<StrictHttpResponse<void>> {
 
@@ -245,8 +290,8 @@ export class FilesService extends BaseService {
     }
 
     return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/json'
+      responseType: 'text',
+      accept: '*/*'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
@@ -264,6 +309,10 @@ export class FilesService extends BaseService {
    * This method doesn't expect any request body.
    */
   downloadFile(params: {
+
+    /**
+     * Id of the deleted file
+     */
     fileId: string;
   }): Observable<void> {
 
@@ -286,8 +335,17 @@ export class FilesService extends BaseService {
    * This method doesn't expect any request body.
    */
   getOwnerFiles$Response(params: {
+
+    /**
+     * Id of the specified object
+     */
     objectId: string;
-  }): Observable<StrictHttpResponse<void>> {
+  }): Observable<StrictHttpResponse<{
+'result'?: Array<IFile>;
+'options'?: {
+[key: string]: (string | number | boolean | null | undefined);
+};
+}>> {
 
     const rb = new RequestBuilder(this.rootUrl, FilesService.GetOwnerFilesPath, 'get');
     if (params) {
@@ -300,7 +358,12 @@ export class FilesService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+        return r as StrictHttpResponse<{
+        'result'?: Array<IFile>;
+        'options'?: {
+        [key: string]: (string | number | boolean | null | undefined);
+        };
+        }>;
       })
     );
   }
@@ -314,11 +377,30 @@ export class FilesService extends BaseService {
    * This method doesn't expect any request body.
    */
   getOwnerFiles(params: {
+
+    /**
+     * Id of the specified object
+     */
     objectId: string;
-  }): Observable<void> {
+  }): Observable<{
+'result'?: Array<IFile>;
+'options'?: {
+[key: string]: (string | number | boolean | null | undefined);
+};
+}> {
 
     return this.getOwnerFiles$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+      map((r: StrictHttpResponse<{
+'result'?: Array<IFile>;
+'options'?: {
+[key: string]: (string | number | boolean | null | undefined);
+};
+}>) => r.body as {
+'result'?: Array<IFile>;
+'options'?: {
+[key: string]: (string | number | boolean | null | undefined);
+};
+})
     );
   }
 

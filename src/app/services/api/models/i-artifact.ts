@@ -9,8 +9,8 @@ import { TObjectId } from './t-object-id';
  * Common artifact entity
  */
 export interface IArtifact {
-  '_coretype'?: string;
-  '_hash'?: string;
+  '_coretype': string;
+  '_hash': string;
   '_id'?: TObjectId;
   name: string;
   preview?: IPreview;

@@ -9,6 +9,7 @@ import { RequestBuilder } from '../request-builder';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
+import { IInitProject } from '../models/i-init-project';
 import { IProject } from '../models/i-project';
 
 
@@ -40,7 +41,12 @@ export class ProjectsService extends BaseService {
    * This method doesn't expect any request body.
    */
   getProjects$Response(params?: {
-  }): Observable<StrictHttpResponse<void>> {
+  }): Observable<StrictHttpResponse<{
+'result'?: Array<IProject>;
+'options'?: {
+[key: string]: (string | number | boolean | null | undefined);
+};
+}>> {
 
     const rb = new RequestBuilder(this.rootUrl, ProjectsService.GetProjectsPath, 'get');
     if (params) {
@@ -52,7 +58,12 @@ export class ProjectsService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+        return r as StrictHttpResponse<{
+        'result'?: Array<IProject>;
+        'options'?: {
+        [key: string]: (string | number | boolean | null | undefined);
+        };
+        }>;
       })
     );
   }
@@ -66,10 +77,25 @@ export class ProjectsService extends BaseService {
    * This method doesn't expect any request body.
    */
   getProjects(params?: {
-  }): Observable<void> {
+  }): Observable<{
+'result'?: Array<IProject>;
+'options'?: {
+[key: string]: (string | number | boolean | null | undefined);
+};
+}> {
 
     return this.getProjects$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+      map((r: StrictHttpResponse<{
+'result'?: Array<IProject>;
+'options'?: {
+[key: string]: (string | number | boolean | null | undefined);
+};
+}>) => r.body as {
+'result'?: Array<IProject>;
+'options'?: {
+[key: string]: (string | number | boolean | null | undefined);
+};
+})
     );
   }
 
@@ -84,13 +110,15 @@ export class ProjectsService extends BaseService {
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `createProject()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   createProject$Response(params?: {
+    body?: IInitProject
   }): Observable<StrictHttpResponse<IProject>> {
 
     const rb = new RequestBuilder(this.rootUrl, ProjectsService.CreateProjectPath, 'post');
     if (params) {
+      rb.body(params.body, 'application/json');
     }
 
     return this.http.request(rb.build({
@@ -110,9 +138,10 @@ export class ProjectsService extends BaseService {
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `createProject$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   createProject(params?: {
+    body?: IInitProject
   }): Observable<IProject> {
 
     return this.createProject$Response(params).pipe(
@@ -123,7 +152,7 @@ export class ProjectsService extends BaseService {
   /**
    * Path part for operation getProject
    */
-  static readonly GetProjectPath = '/projects/{project}';
+  static readonly GetProjectPath = '/projects/{projectId}';
 
   /**
    * Get project by ID
@@ -134,12 +163,16 @@ export class ProjectsService extends BaseService {
    * This method doesn't expect any request body.
    */
   getProject$Response(params: {
-    project: string;
-  }): Observable<StrictHttpResponse<void>> {
+
+    /**
+     * Project ID
+     */
+    projectId: string;
+  }): Observable<StrictHttpResponse<IProject>> {
 
     const rb = new RequestBuilder(this.rootUrl, ProjectsService.GetProjectPath, 'get');
     if (params) {
-      rb.path('project', params.project, {});
+      rb.path('projectId', params.projectId, {});
     }
 
     return this.http.request(rb.build({
@@ -148,7 +181,7 @@ export class ProjectsService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+        return r as StrictHttpResponse<IProject>;
       })
     );
   }
@@ -162,18 +195,22 @@ export class ProjectsService extends BaseService {
    * This method doesn't expect any request body.
    */
   getProject(params: {
-    project: string;
-  }): Observable<void> {
+
+    /**
+     * Project ID
+     */
+    projectId: string;
+  }): Observable<IProject> {
 
     return this.getProject$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+      map((r: StrictHttpResponse<IProject>) => r.body as IProject)
     );
   }
 
   /**
    * Path part for operation updateProject
    */
-  static readonly UpdateProjectPath = '/projects/{project}';
+  static readonly UpdateProjectPath = '/projects/{projectId}';
 
   /**
    * Update project
@@ -181,15 +218,21 @@ export class ProjectsService extends BaseService {
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `updateProject()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   updateProject$Response(params: {
-    project: string;
-  }): Observable<StrictHttpResponse<void>> {
+
+    /**
+     * Project ID
+     */
+    projectId: string;
+    body?: IInitProject
+  }): Observable<StrictHttpResponse<IProject>> {
 
     const rb = new RequestBuilder(this.rootUrl, ProjectsService.UpdateProjectPath, 'put');
     if (params) {
-      rb.path('project', params.project, {});
+      rb.path('projectId', params.projectId, {});
+      rb.body(params.body, 'application/json');
     }
 
     return this.http.request(rb.build({
@@ -198,7 +241,7 @@ export class ProjectsService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+        return r as StrictHttpResponse<IProject>;
       })
     );
   }
@@ -209,14 +252,19 @@ export class ProjectsService extends BaseService {
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `updateProject$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   updateProject(params: {
-    project: string;
-  }): Observable<void> {
+
+    /**
+     * Project ID
+     */
+    projectId: string;
+    body?: IInitProject
+  }): Observable<IProject> {
 
     return this.updateProject$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+      map((r: StrictHttpResponse<IProject>) => r.body as IProject)
     );
   }
 
