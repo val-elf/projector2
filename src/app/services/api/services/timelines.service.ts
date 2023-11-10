@@ -9,6 +9,7 @@ import { RequestBuilder } from '../request-builder';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
+import { ITimeline } from '../models/i-timeline';
 
 
 /**
@@ -39,8 +40,12 @@ export class TimelinesService extends BaseService {
    * This method doesn't expect any request body.
    */
   getProjectTimelines$Response(params: {
+
+    /**
+     * Project ID
+     */
     projectId: string;
-  }): Observable<StrictHttpResponse<void>> {
+  }): Observable<StrictHttpResponse<Array<ITimeline>>> {
 
     const rb = new RequestBuilder(this.rootUrl, TimelinesService.GetProjectTimelinesPath, 'get');
     if (params) {
@@ -53,7 +58,7 @@ export class TimelinesService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+        return r as StrictHttpResponse<Array<ITimeline>>;
       })
     );
   }
@@ -67,11 +72,15 @@ export class TimelinesService extends BaseService {
    * This method doesn't expect any request body.
    */
   getProjectTimelines(params: {
+
+    /**
+     * Project ID
+     */
     projectId: string;
-  }): Observable<void> {
+  }): Observable<Array<ITimeline>> {
 
     return this.getProjectTimelines$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+      map((r: StrictHttpResponse<Array<ITimeline>>) => r.body as Array<ITimeline>)
     );
   }
 
@@ -86,15 +95,21 @@ export class TimelinesService extends BaseService {
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `createTimeline()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   createTimeline$Response(params: {
+
+    /**
+     * Project ID
+     */
     projectId: string;
-  }): Observable<StrictHttpResponse<void>> {
+    body?: ITimeline
+  }): Observable<StrictHttpResponse<ITimeline>> {
 
     const rb = new RequestBuilder(this.rootUrl, TimelinesService.CreateTimelinePath, 'post');
     if (params) {
       rb.path('projectId', params.projectId, {});
+      rb.body(params.body, 'application/json');
     }
 
     return this.http.request(rb.build({
@@ -103,7 +118,7 @@ export class TimelinesService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+        return r as StrictHttpResponse<ITimeline>;
       })
     );
   }
@@ -114,14 +129,19 @@ export class TimelinesService extends BaseService {
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `createTimeline$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   createTimeline(params: {
+
+    /**
+     * Project ID
+     */
     projectId: string;
-  }): Observable<void> {
+    body?: ITimeline
+  }): Observable<ITimeline> {
 
     return this.createTimeline$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+      map((r: StrictHttpResponse<ITimeline>) => r.body as ITimeline)
     );
   }
 
@@ -136,13 +156,15 @@ export class TimelinesService extends BaseService {
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `updateTimeline()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   updateTimeline$Response(params?: {
-  }): Observable<StrictHttpResponse<void>> {
+    body?: ITimeline
+  }): Observable<StrictHttpResponse<(ITimeline | Array<ITimeline>)>> {
 
     const rb = new RequestBuilder(this.rootUrl, TimelinesService.UpdateTimelinePath, 'put');
     if (params) {
+      rb.body(params.body, 'application/json');
     }
 
     return this.http.request(rb.build({
@@ -151,7 +173,7 @@ export class TimelinesService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+        return r as StrictHttpResponse<(ITimeline | Array<ITimeline>)>;
       })
     );
   }
@@ -162,13 +184,14 @@ export class TimelinesService extends BaseService {
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `updateTimeline$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   updateTimeline(params?: {
-  }): Observable<void> {
+    body?: ITimeline
+  }): Observable<(ITimeline | Array<ITimeline>)> {
 
     return this.updateTimeline$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+      map((r: StrictHttpResponse<(ITimeline | Array<ITimeline>)>) => r.body as (ITimeline | Array<ITimeline>))
     );
   }
 
@@ -186,8 +209,12 @@ export class TimelinesService extends BaseService {
    * This method doesn't expect any request body.
    */
   getTimeline$Response(params: {
+
+    /**
+     * Timeline ID
+     */
     timelineId: string;
-  }): Observable<StrictHttpResponse<void>> {
+  }): Observable<StrictHttpResponse<ITimeline>> {
 
     const rb = new RequestBuilder(this.rootUrl, TimelinesService.GetTimelinePath, 'get');
     if (params) {
@@ -200,7 +227,7 @@ export class TimelinesService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+        return r as StrictHttpResponse<ITimeline>;
       })
     );
   }
@@ -214,11 +241,15 @@ export class TimelinesService extends BaseService {
    * This method doesn't expect any request body.
    */
   getTimeline(params: {
+
+    /**
+     * Timeline ID
+     */
     timelineId: string;
-  }): Observable<void> {
+  }): Observable<ITimeline> {
 
     return this.getTimeline$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+      map((r: StrictHttpResponse<ITimeline>) => r.body as ITimeline)
     );
   }
 
@@ -236,8 +267,14 @@ export class TimelinesService extends BaseService {
    * This method doesn't expect any request body.
    */
   deleteTimeline$Response(params: {
+
+    /**
+     * Timeline ID
+     */
     timelineId: string;
-  }): Observable<StrictHttpResponse<void>> {
+  }): Observable<StrictHttpResponse<{
+'delete'?: boolean;
+}>> {
 
     const rb = new RequestBuilder(this.rootUrl, TimelinesService.DeleteTimelinePath, 'delete');
     if (params) {
@@ -250,7 +287,9 @@ export class TimelinesService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+        return r as StrictHttpResponse<{
+        'delete'?: boolean;
+        }>;
       })
     );
   }
@@ -264,11 +303,21 @@ export class TimelinesService extends BaseService {
    * This method doesn't expect any request body.
    */
   deleteTimeline(params: {
+
+    /**
+     * Timeline ID
+     */
     timelineId: string;
-  }): Observable<void> {
+  }): Observable<{
+'delete'?: boolean;
+}> {
 
     return this.deleteTimeline$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+      map((r: StrictHttpResponse<{
+'delete'?: boolean;
+}>) => r.body as {
+'delete'?: boolean;
+})
     );
   }
 

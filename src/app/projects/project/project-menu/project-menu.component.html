@@ -1,3 +1,3 @@
 <ng-container *ngFor="let menuItem of menuItems">
-    <div class="menu-item link" [routerLink]="[menuItem.url]">{{ 'APP_PROJECT_MENU_' + menuItem.title | translate }}</div>
+    <div class="menu-item link" [routerLink]="[menuItem.url]" [routerLinkActive]="'active'">{{ 'APP_PROJECT_MENU_' + menuItem.title | translate }}</div>
 </ng-container>

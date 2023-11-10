@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup } from '@angular/forms';
 import { AuthorizationService } from '~/services/auth.service';
 
@@ -16,15 +16,24 @@ export class AuthorizationComponent {
 
     constructor(
         private authorizationService: AuthorizationService,
+        private activeRoute: ActivatedRoute,
         private router: Router,
     ) { }
+
+    ngOnInit() {
+        this.activeRoute.url.subscribe(url => {
+            if (url[0].path === 'logout') {
+                this.authorizationService.logout();
+                this.router.navigate(['/']);
+            }
+        });
+    }
 
     public login(): void {
         this.authorizationService.login(
             this.formGroup.value.login,
             this.formGroup.value.password
         ).subscribe(session => {
-            console.log('User is', session.userId);
             this.router.navigate(['/']);
         });
     }

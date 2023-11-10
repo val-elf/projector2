@@ -63,3 +63,7 @@ $table-head-bgcolor: #6A4395;
 $table-head-color: #E8F6FF;
 $table-row-color: #FEF0E0;
 $table-row-hover-color: #F0EFE0;
+
+:root {
+    --main-color: #{$link-color};
+}

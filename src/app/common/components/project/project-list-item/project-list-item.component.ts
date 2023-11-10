@@ -1,7 +1,7 @@
 import { Component, Input, HostBinding, ViewChild, ElementRef, HostListener, AfterViewInit }  from '@angular/core';
-import { IProject } from '~/models/project.model';
 import { EIconTypes } from '../../preview/preview-image.component';
 import ResizeObserver from 'resize-observer-polyfill';
+import { IProject } from '~/services/api/models';
 
 @Component({
     selector: 'app-project-list-item',

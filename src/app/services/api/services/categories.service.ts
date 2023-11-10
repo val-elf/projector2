@@ -9,6 +9,8 @@ import { RequestBuilder } from '../request-builder';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
+import { ICategory } from '../models/i-category';
+import { IInitCategory } from '../models/i-init-category';
 
 
 /**
@@ -39,8 +41,12 @@ export class CategoriesService extends BaseService {
    * This method doesn't expect any request body.
    */
   getOwnerCategories$Response(params: {
+
+    /**
+     * Owner ID
+     */
     ownerId: string;
-  }): Observable<StrictHttpResponse<void>> {
+  }): Observable<StrictHttpResponse<Array<ICategory>>> {
 
     const rb = new RequestBuilder(this.rootUrl, CategoriesService.GetOwnerCategoriesPath, 'get');
     if (params) {
@@ -53,7 +59,7 @@ export class CategoriesService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+        return r as StrictHttpResponse<Array<ICategory>>;
       })
     );
   }
@@ -67,11 +73,15 @@ export class CategoriesService extends BaseService {
    * This method doesn't expect any request body.
    */
   getOwnerCategories(params: {
+
+    /**
+     * Owner ID
+     */
     ownerId: string;
-  }): Observable<void> {
+  }): Observable<Array<ICategory>> {
 
     return this.getOwnerCategories$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+      map((r: StrictHttpResponse<Array<ICategory>>) => r.body as Array<ICategory>)
     );
   }
 
@@ -86,15 +96,21 @@ export class CategoriesService extends BaseService {
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `createCategory()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   createCategory$Response(params: {
+
+    /**
+     * Owner ID
+     */
     ownerId: string;
-  }): Observable<StrictHttpResponse<void>> {
+    body?: IInitCategory
+  }): Observable<StrictHttpResponse<ICategory>> {
 
     const rb = new RequestBuilder(this.rootUrl, CategoriesService.CreateCategoryPath, 'post');
     if (params) {
       rb.path('ownerId', params.ownerId, {});
+      rb.body(params.body, 'application/json');
     }
 
     return this.http.request(rb.build({
@@ -103,7 +119,7 @@ export class CategoriesService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+        return r as StrictHttpResponse<ICategory>;
       })
     );
   }
@@ -114,14 +130,19 @@ export class CategoriesService extends BaseService {
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `createCategory$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   createCategory(params: {
+
+    /**
+     * Owner ID
+     */
     ownerId: string;
-  }): Observable<void> {
+    body?: IInitCategory
+  }): Observable<ICategory> {
 
     return this.createCategory$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+      map((r: StrictHttpResponse<ICategory>) => r.body as ICategory)
     );
   }
 
@@ -136,17 +157,27 @@ export class CategoriesService extends BaseService {
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `updateCategory()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   updateCategory$Response(params: {
+
+    /**
+     * Owner ID
+     */
     ownerId: string;
+
+    /**
+     * Category ID
+     */
     categoryId: string;
-  }): Observable<StrictHttpResponse<void>> {
+    body?: IInitCategory
+  }): Observable<StrictHttpResponse<ICategory>> {
 
     const rb = new RequestBuilder(this.rootUrl, CategoriesService.UpdateCategoryPath, 'put');
     if (params) {
       rb.path('ownerId', params.ownerId, {});
       rb.path('categoryId', params.categoryId, {});
+      rb.body(params.body, 'application/json');
     }
 
     return this.http.request(rb.build({
@@ -155,7 +186,7 @@ export class CategoriesService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+        return r as StrictHttpResponse<ICategory>;
       })
     );
   }
@@ -166,15 +197,24 @@ export class CategoriesService extends BaseService {
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `updateCategory$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   updateCategory(params: {
+
+    /**
+     * Owner ID
+     */
     ownerId: string;
+
+    /**
+     * Category ID
+     */
     categoryId: string;
-  }): Observable<void> {
+    body?: IInitCategory
+  }): Observable<ICategory> {
 
     return this.updateCategory$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+      map((r: StrictHttpResponse<ICategory>) => r.body as ICategory)
     );
   }
 

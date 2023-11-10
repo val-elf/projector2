@@ -1,0 +1,15 @@
+.page-header {
+    display: grid;
+    grid-template-columns: minmax(400px, max-content) 1fr minmax(20%, max-content);
+    grid-column-gap: 20px;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 12px;
+
+    .project-info {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        column-gap: 2em;
+    }
+}

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
-import { IDbObject } from '~/models/object.model';
-import { ObjectsService } from '~/services/objects.service';
+import { IDbObject } from '~/services/api/models';
+import { DbObjectsService } from '~/services/api/services';
 
 @Component({
     selector: 'app-project-latest-documents',
@@ -16,12 +16,12 @@ export class ProjectLatestDocumentsComponent {
     }
 
     constructor(
-        private ObjectsService: ObjectsService,
+        private ObjectsService: DbObjectsService,
         private activatedRoute: ActivatedRoute,
     ) {
-        this.ObjectsService.getObjects({ limit: 10, order: { _updated: { _dt: -1 }} }, this.project._id).subscribe((documents) => {
+        /*this.ObjectsService.getObject({ limit: 10, order: { _updated: { _dt: -1 }} }, this.project._id).subscribe((documents) => {
             this.documents = documents;
-        });
+        });*/
     }
 
 }

@@ -1,1 +1,17 @@
-PLOT O MALENKIY PLOOOOTTT!!!
+<div>
+    Time Lines and Time Spots
+    <div class="project-schema">
+        <ng-container *ngIf="projectSchema">
+            <ng-container [ngTemplateOutlet]="schemaDisplay" [ngTemplateOutletContext]="{ schema: projectSchema }"></ng-container>
+        </ng-container>
+    </div>
+</div>
+
+<ng-template #schemaDisplay let-schema="schema">
+    <div class="container">
+        {{ schema.name }}
+        <ng-container *ngFor="let cschema of schema.children ?? []">
+            <ng-container [ngTemplateOutlet]="schemaDisplay" [ngTemplateOutletContext]="{ schema: cschema }"></ng-container>
+        </ng-container>
+    </div>
+</ng-template>

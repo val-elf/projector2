@@ -3,8 +3,8 @@ export interface IDateOperation {
     _user: string;
 }
 
-export interface IBaseServerItem {
-    _id: string;
+export interface IDbObjectBase {
+    _id?: string;
     _coretype?: string;
     _hash?: string;
     _create?: IDateOperation;

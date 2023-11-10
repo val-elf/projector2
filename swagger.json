@@ -1,0 +1,214 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Projector Backend",
+        "version": "1.0.0"
+    },
+    "components": {
+        "securitySchemes": {
+            "APIKeyHeader": {
+                "type": "apiKey",
+                "in": "header",
+                "name": "Authorization"
+            }
+        },
+        "security": {
+            "APIKeyHeader": []
+        },
+        "schemas": {
+            "TObjectId": {
+                "type": "string"
+            },
+            "ICommonEntity": {
+                "type": "object",
+                "properties": {
+                    "properties": {
+                        "_id": {
+                            "$ref": "#/components/schemas/TObjectId"
+                        }
+                    }
+                },
+                "description": "Common entity interface"
+            },
+            "EArtifactType": {
+                "type": "string",
+                "enum": [
+                    "item",
+                    "weapon",
+                    "armor",
+                    "spell",
+                    "skill"
+                ],
+                "description": "Artifact entity type enum"
+            },
+            "EArtifactSubtype": {
+                "type": "string",
+                "enum": [
+                    "steelArms",
+                    "fireArms"
+                ],
+                "description": "Artifact entity subtype enum"
+            },
+            "IArtifact": {
+                "type": "object",
+                "properties": {
+                    "properties": {
+                        "preview": {
+                            "$ref": "#/components/schemas/IPreview"
+                        }
+                    }
+                },
+                "required": [
+                    "name",
+                    "type",
+                    "_coretype",
+                    "_hash"
+                ],
+                "description": "Common artifact entity"
+            },
+            "IInitArtifact": {
+                "type": "object",
+                "properties": {
+                    "properties": {
+                        "preview": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "required": [
+                    "name",
+                    "type"
+                ],
+                "description": "Update artifact entity client schema (create or update)"
+            },
+            "ICategory": {
+                "type": "object",
+                "properties": {
+                    "properties": {
+                        "_id": {
+                            "$ref": "#/components/schemas/TObjectId"
+                        }
+                    }
+                },
+                "required": [
+                    "name",
+                    "description",
+                    "_coretype",
+                    "_hash"
+                ],
+                "description": "Category"
+            },
+            "IInitCategory": {
+                "type": "object",
+                "properties": {
+                    "properties": {
+                        "_id": {
+                            "$ref": "#/components/schemas/TObjectId"
+                        }
+                    }
+                },
+                "required": [
+                    "name",
+                    "description"
+                ],
+                "description": "Initiated category item"
+            },
+            "IBaseCharacter": {
+                "type": "object",
+                "properties": {
+                    "properties": {
+                        "description": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "required": [
+                    "name",
+                    "role",
+                    "description"
+                ],
+                "description": "Base character interface"
+            },
+
+
+            "EDbObjectStatuses": {
+                "type": "string",
+                "enum": [
+                    "normal",
+                    "deleted"
+                ],
+                "description": "DbObject statuses"
+            },
+            "IPreview": {
+                "type": "object",
+                "properties": {
+                    "properties": {
+                        "_id": {
+                            "$ref": "#/components/schemas/TObjectId"
+                        }
+                    }
+                },
+                "required": [
+                    "type",
+                    "hash",
+                    "width",
+                    "height"
+                ],
+                "description": "Preview interface for dbObjects"
+            }
+
+        }
+    },
+    "tags": [
+        {
+            "name": "Artifacts",
+            "description": "Project's artifacts management API"
+        },
+        {
+            "name": "Categories",
+            "description": "Categories management API"
+        },
+        {
+            "name": "Characters",
+            "description": "Project's characters management API"
+        },
+        {
+            "name": "Documents",
+            "description": "Documents management APIs"
+        },
+        {
+            "name": "Files",
+            "description": "Files management API"
+        },
+        {
+            "name": "Locations",
+            "description": "Project's locations management API"
+        },
+        {
+            "name": "DbObjects",
+            "description": "Project's dbobjects management API"
+        },
+        {
+            "name": "Projects",
+            "description": "Projects management API"
+        },
+        {
+            "name": "Tags",
+            "description": "Project's tags management API"
+        },
+        {
+            "name": "Timelines",
+            "description": "Project's timelines management API"
+        },
+        {
+            "name": "Timespots",
+            "description": "Timespots management API"
+        },
+        {
+            "name": "Users",
+            "description": "Users management API"
+        }
+    ],
+    "paths": {
+   }
+}

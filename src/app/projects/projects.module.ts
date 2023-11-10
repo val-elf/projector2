@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ProjectComponent } from './project/project.component';
 import { ProjectsRoutingModule } from './projects-routing.module';
-import { CommonSharedModule } from '~/common/common.module';
 import { ProjectsComponent } from './projects.component';
 import { ProjectMenuComponent } from './project/project-menu/project-menu.component';
 import { ProjectPlotComponent } from './project/plot/project-plot.component';
@@ -17,14 +16,23 @@ import { ProjectScheduleComponent } from './project/dashboard/schedule/project-s
 import { ProjectMessagesComponent } from './project/dashboard/messages/project-messages.component';
 import { ProjectStickersComponent } from './project/dashboard/stickers/project-stickers.component';
 import { BreadcrumbModule } from 'xng-breadcrumb';
+import { ComponentsModule } from '~/common/components/components.module';
+import { PipesModule } from '~/pipes/pipes.module';
+import { UiModule } from '~/common/ui/ui.module';
+import { ProjectHeaderComponent } from './project/project-header/project-header.component';
+import { ProjectContextMenuComponent } from './project/project-context-menu/project-context-menu.component';
+import { PopupModule } from './project/popup/popup.module';
 
 @NgModule({
     imports: [
         CommonModule,
         RouterModule,
         ProjectsRoutingModule,
-        CommonSharedModule,
         BreadcrumbModule,
+        ComponentsModule,
+        UiModule,
+        PipesModule,
+        PopupModule,
     ],
     declarations: [
         ProjectsComponent,
@@ -40,6 +48,8 @@ import { BreadcrumbModule } from 'xng-breadcrumb';
         ProjectScheduleComponent,
         ProjectMessagesComponent,
         ProjectStickersComponent,
+        ProjectHeaderComponent,
+        ProjectContextMenuComponent,
     ],
     exports: [
         ProjectComponent,

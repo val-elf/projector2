@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { BreadcrumbService } from 'xng-breadcrumb';
 import { EIconTypes } from '~/common/components/preview/preview-image.component';
-import { IProject } from '~/models/project.model';
+import { IProject } from '~/services/api/models';
 import { TranslationService } from '~/services/translation.service';
 
 @Component({
@@ -18,20 +18,7 @@ export class ProjectComponent implements OnInit {
         private activeRoute: ActivatedRoute,
         private breadcrumbService: BreadcrumbService,
         private translationService: TranslationService,
-        private router: Router,
     ) { }
-
-    public get isActive(): boolean {
-        return this.router.isActive(
-            `/projects/${this.project?._id}`,
-            {
-                paths: 'exact',
-                queryParams: 'exact',
-                fragment: 'ignored',
-                matrixParams: 'ignored'
-            }
-        );
-    }
 
     ngOnInit() {
         this.activeRoute.data.subscribe(data => {

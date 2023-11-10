@@ -6,6 +6,7 @@ import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
 import { ArtifactsService } from './services/artifacts.service';
 import { CategoriesService } from './services/categories.service';
+import { CategorySchemasService } from './services/category-schemas.service';
 import { CharactersService } from './services/characters.service';
 import { DocumentsService } from './services/documents.service';
 import { FilesService } from './services/files.service';
@@ -27,6 +28,7 @@ import { UsersService } from './services/users.service';
   providers: [
     ArtifactsService,
     CategoriesService,
+    CategorySchemasService,
     CharactersService,
     DocumentsService,
     FilesService,

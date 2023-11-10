@@ -1,7 +1,6 @@
-import { IBaseServerItem } from './base-server.model';
-import { IUser } from './user.model';
+import { IDbObject } from '~/services/api/models';
 
-export interface ISession extends IBaseServerItem {
+export interface ISession extends IDbObject {
     sessionToken: string;
     userId: string;
 }

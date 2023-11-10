@@ -1,8 +1,8 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { IProject } from '~/models/project.model';
-import { ProjectsService } from '~/services/projects.service';
 import { EIconTypes } from '../../preview/preview-image.component';
+import { ProjectsService } from '~/services/api/services';
+import { IProject } from '~/services/api/models';
 
 @Component({
     selector: 'app-projects-list',
@@ -12,11 +12,11 @@ import { EIconTypes } from '../../preview/preview-image.component';
 export class ProjectsListComponent implements OnInit {
 
     private destroy$: Subject<void> = new Subject<void>();
-    public projects$: Observable<IProject[]> = this.projectsService.getProjects();
+    public projects$: Observable<{ result?: IProject[], options?: { [key: string]: any } }> = this.projectsService.getProjects();
     public iconTypes = EIconTypes;
 
     constructor(
-        private projectsService: ProjectsService,
+        private projectsService: ProjectsService
     ) {}
 
     ngOnInit() {

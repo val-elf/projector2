@@ -1,7 +1,7 @@
 <app-scrollable class="brick growth">
     <div class="projects list hovered">
         <app-project-list-item
-            *ngFor="let project of projects$ | async"
+            *ngFor="let project of (projects$ | async)?.result"
             [project]="project"
         ></app-project-list-item>
     </div>

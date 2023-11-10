@@ -205,6 +205,67 @@ export class ArtifactsService extends BaseService {
   }
 
   /**
+   * Path part for operation updateArtifact
+   */
+  static readonly UpdateArtifactPath = '/artifacts/{artifactId}';
+
+  /**
+   * Update existing artifact
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateArtifact()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateArtifact$Response(params: {
+
+    /**
+     * Artifact ID
+     */
+    artifactId: string;
+    body?: IInitArtifact
+  }): Observable<StrictHttpResponse<IArtifact>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ArtifactsService.UpdateArtifactPath, 'put');
+    if (params) {
+      rb.path('artifactId', params.artifactId, {});
+      rb.body(params.body, 'application/json');
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<IArtifact>;
+      })
+    );
+  }
+
+  /**
+   * Update existing artifact
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `updateArtifact$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateArtifact(params: {
+
+    /**
+     * Artifact ID
+     */
+    artifactId: string;
+    body?: IInitArtifact
+  }): Observable<IArtifact> {
+
+    return this.updateArtifact$Response(params).pipe(
+      map((r: StrictHttpResponse<IArtifact>) => r.body as IArtifact)
+    );
+  }
+
+  /**
    * Path part for operation deleteArtifact
    */
   static readonly DeleteArtifactPath = '/artifacts/{artifactId}';
@@ -218,6 +279,10 @@ export class ArtifactsService extends BaseService {
    * This method doesn't expect any request body.
    */
   deleteArtifact$Response(params: {
+
+    /**
+     * Artifact ID
+     */
     artifactId: string;
   }): Observable<StrictHttpResponse<{
 'deleted'?: boolean;
@@ -250,6 +315,10 @@ export class ArtifactsService extends BaseService {
    * This method doesn't expect any request body.
    */
   deleteArtifact(params: {
+
+    /**
+     * Artifact ID
+     */
     artifactId: string;
   }): Observable<{
 'deleted'?: boolean;
@@ -261,56 +330,6 @@ export class ArtifactsService extends BaseService {
 }>) => r.body as {
 'deleted'?: boolean;
 })
-    );
-  }
-
-  /**
-   * Path part for operation updateArtifact
-   */
-  static readonly UpdateArtifactPath = '/artifacts/{artifact}';
-
-  /**
-   * Update existing artifact
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `updateArtifact()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  updateArtifact$Response(params: {
-    artifact: string;
-  }): Observable<StrictHttpResponse<IArtifact>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ArtifactsService.UpdateArtifactPath, 'put');
-    if (params) {
-      rb.path('artifact', params.artifact, {});
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<IArtifact>;
-      })
-    );
-  }
-
-  /**
-   * Update existing artifact
-   *
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `updateArtifact$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  updateArtifact(params: {
-    artifact: string;
-  }): Observable<IArtifact> {
-
-    return this.updateArtifact$Response(params).pipe(
-      map((r: StrictHttpResponse<IArtifact>) => r.body as IArtifact)
     );
   }
 

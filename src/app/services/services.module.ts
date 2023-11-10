@@ -1,16 +1,20 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { MatDialogModule } from '@angular/material/dialog';
 import { AuthorizationService } from './auth.service';
-import { ProjectsService } from './projects.service';
-import { ApiModule } from './api/api.module';
+import { PopupService } from './popup/popup.service';
 
 @NgModule({
     declarations: [],
-    imports: [CommonModule, HttpClientModule, ApiModule],
+    imports: [
+        CommonModule,
+        HttpClientModule,
+        MatDialogModule,
+    ],
     providers: [
         AuthorizationService,
-        ProjectsService,
+        PopupService,
     ]
 })
 export class ServicesModule {}

@@ -6,15 +6,15 @@ import { ColorSelectorComponent } from './color-selector/color-selector.componen
 import { PictureEditorComponent } from './picture-editor.component';
 import { ToolPanelComponent } from './tool-panel/too-panel.component';
 import { BrushSettingsComponent } from './tool-panel/brush/brush.component';
-import { SharedComponentsModule } from '../components/shared.module';
 import { LayersManagerModule } from './layers-manager/layers-manager.module';
+import { RoundSliderModule } from '../ui/round-slider/round-slider.module';
 
 @NgModule({
     imports: [
         CommonModule,
         MatSliderModule,
         MatFormFieldModule,
-        SharedComponentsModule,
+        RoundSliderModule,
         LayersManagerModule,
     ],
     declarations: [

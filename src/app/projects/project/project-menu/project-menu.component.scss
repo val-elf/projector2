@@ -4,9 +4,17 @@
     justify-content: center;
 
     .menu-item {
+        font-size: 21px;
         padding-right: 10px;
         display: flex;
         align-items: center;
+        font-weight: 100;
+
+        &.active {
+            cursor: default;
+            text-decoration: none;
+            font-weight: 400;
+        }
 
         &:not(:last-child) {
             &::after {
@@ -18,5 +26,6 @@
                 margin-left: 10px;
             }
         }
+
     }
 }

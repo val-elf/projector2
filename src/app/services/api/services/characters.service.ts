@@ -9,7 +9,9 @@ import { RequestBuilder } from '../request-builder';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
+import { IArtifact } from '../models/i-artifact';
 import { ICharacter } from '../models/i-character';
+import { IInitCharacter } from '../models/i-init-character';
 
 
 /**
@@ -40,8 +42,14 @@ export class CharactersService extends BaseService {
    * This method doesn't expect any request body.
    */
   getCharactersCount$Response(params: {
+
+    /**
+     * Id of the Project
+     */
     projectId: string;
-  }): Observable<StrictHttpResponse<void>> {
+  }): Observable<StrictHttpResponse<{
+'count'?: number;
+}>> {
 
     const rb = new RequestBuilder(this.rootUrl, CharactersService.GetCharactersCountPath, 'get');
     if (params) {
@@ -54,7 +62,9 @@ export class CharactersService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+        return r as StrictHttpResponse<{
+        'count'?: number;
+        }>;
       })
     );
   }
@@ -68,11 +78,21 @@ export class CharactersService extends BaseService {
    * This method doesn't expect any request body.
    */
   getCharactersCount(params: {
+
+    /**
+     * Id of the Project
+     */
     projectId: string;
-  }): Observable<void> {
+  }): Observable<{
+'count'?: number;
+}> {
 
     return this.getCharactersCount$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+      map((r: StrictHttpResponse<{
+'count'?: number;
+}>) => r.body as {
+'count'?: number;
+})
     );
   }
 
@@ -90,8 +110,12 @@ export class CharactersService extends BaseService {
    * This method doesn't expect any request body.
    */
   getCharacters$Response(params: {
+
+    /**
+     * Id of the Project
+     */
     projectId: string;
-  }): Observable<StrictHttpResponse<void>> {
+  }): Observable<StrictHttpResponse<Array<ICharacter>>> {
 
     const rb = new RequestBuilder(this.rootUrl, CharactersService.GetCharactersPath, 'get');
     if (params) {
@@ -104,7 +128,7 @@ export class CharactersService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+        return r as StrictHttpResponse<Array<ICharacter>>;
       })
     );
   }
@@ -118,11 +142,15 @@ export class CharactersService extends BaseService {
    * This method doesn't expect any request body.
    */
   getCharacters(params: {
+
+    /**
+     * Id of the Project
+     */
     projectId: string;
-  }): Observable<void> {
+  }): Observable<Array<ICharacter>> {
 
     return this.getCharacters$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+      map((r: StrictHttpResponse<Array<ICharacter>>) => r.body as Array<ICharacter>)
     );
   }
 
@@ -137,15 +165,21 @@ export class CharactersService extends BaseService {
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `createCharacter()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   createCharacter$Response(params: {
+
+    /**
+     * Id of the Project
+     */
     projectId: string;
-  }): Observable<StrictHttpResponse<void>> {
+    body?: IInitCharacter
+  }): Observable<StrictHttpResponse<ICharacter>> {
 
     const rb = new RequestBuilder(this.rootUrl, CharactersService.CreateCharacterPath, 'post');
     if (params) {
       rb.path('projectId', params.projectId, {});
+      rb.body(params.body, 'application/json');
     }
 
     return this.http.request(rb.build({
@@ -154,7 +188,7 @@ export class CharactersService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+        return r as StrictHttpResponse<ICharacter>;
       })
     );
   }
@@ -165,14 +199,19 @@ export class CharactersService extends BaseService {
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `createCharacter$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   createCharacter(params: {
+
+    /**
+     * Id of the Project
+     */
     projectId: string;
-  }): Observable<void> {
+    body?: IInitCharacter
+  }): Observable<ICharacter> {
 
     return this.createCharacter$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+      map((r: StrictHttpResponse<ICharacter>) => r.body as ICharacter)
     );
   }
 
@@ -182,7 +221,7 @@ export class CharactersService extends BaseService {
   static readonly GetCharacterPath = '/characters/{characterId}';
 
   /**
-   * Get character
+   * Get particular character by its Id
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getCharacter()` instead.
@@ -190,60 +229,14 @@ export class CharactersService extends BaseService {
    * This method doesn't expect any request body.
    */
   getCharacter$Response(params: {
-    characterId: string;
-  }): Observable<StrictHttpResponse<void>> {
 
-    const rb = new RequestBuilder(this.rootUrl, CharactersService.GetCharacterPath, 'get');
-    if (params) {
-      rb.path('characterId', params.characterId, {});
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
-      })
-    );
-  }
-
-  /**
-   * Get character
-   *
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getCharacter$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getCharacter(params: {
-    characterId: string;
-  }): Observable<void> {
-
-    return this.getCharacter$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
-    );
-  }
-
-  /**
-   * Path part for operation updateCharacter
-   */
-  static readonly UpdateCharacterPath = '/characters/{characterId}';
-
-  /**
-   * Update character
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `updateCharacter()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  updateCharacter$Response(params: {
+    /**
+     * Id of the character
+     */
     characterId: string;
   }): Observable<StrictHttpResponse<ICharacter>> {
 
-    const rb = new RequestBuilder(this.rootUrl, CharactersService.UpdateCharacterPath, 'put');
+    const rb = new RequestBuilder(this.rootUrl, CharactersService.GetCharacterPath, 'get');
     if (params) {
       rb.path('characterId', params.characterId, {});
     }
@@ -260,15 +253,80 @@ export class CharactersService extends BaseService {
   }
 
   /**
-   * Update character
+   * Get particular character by its Id
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getCharacter$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCharacter(params: {
+
+    /**
+     * Id of the character
+     */
+    characterId: string;
+  }): Observable<ICharacter> {
+
+    return this.getCharacter$Response(params).pipe(
+      map((r: StrictHttpResponse<ICharacter>) => r.body as ICharacter)
+    );
+  }
+
+  /**
+   * Path part for operation updateCharacter
+   */
+  static readonly UpdateCharacterPath = '/characters/{characterId}';
+
+  /**
+   * Update particular character
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateCharacter()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateCharacter$Response(params: {
+
+    /**
+     * Id of the character
+     */
+    characterId: string;
+    body?: IInitCharacter
+  }): Observable<StrictHttpResponse<ICharacter>> {
+
+    const rb = new RequestBuilder(this.rootUrl, CharactersService.UpdateCharacterPath, 'put');
+    if (params) {
+      rb.path('characterId', params.characterId, {});
+      rb.body(params.body, 'application/json');
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<ICharacter>;
+      })
+    );
+  }
+
+  /**
+   * Update particular character
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `updateCharacter$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   updateCharacter(params: {
+
+    /**
+     * Id of the character
+     */
     characterId: string;
+    body?: IInitCharacter
   }): Observable<ICharacter> {
 
     return this.updateCharacter$Response(params).pipe(
@@ -290,8 +348,14 @@ export class CharactersService extends BaseService {
    * This method doesn't expect any request body.
    */
   deleteCharacter$Response(params: {
+
+    /**
+     * Id of the character
+     */
     characterId: string;
-  }): Observable<StrictHttpResponse<void>> {
+  }): Observable<StrictHttpResponse<{
+'deleted'?: boolean;
+}>> {
 
     const rb = new RequestBuilder(this.rootUrl, CharactersService.DeleteCharacterPath, 'delete');
     if (params) {
@@ -304,7 +368,9 @@ export class CharactersService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+        return r as StrictHttpResponse<{
+        'deleted'?: boolean;
+        }>;
       })
     );
   }
@@ -318,11 +384,21 @@ export class CharactersService extends BaseService {
    * This method doesn't expect any request body.
    */
   deleteCharacter(params: {
+
+    /**
+     * Id of the character
+     */
     characterId: string;
-  }): Observable<void> {
+  }): Observable<{
+'deleted'?: boolean;
+}> {
 
     return this.deleteCharacter$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+      map((r: StrictHttpResponse<{
+'deleted'?: boolean;
+}>) => r.body as {
+'deleted'?: boolean;
+})
     );
   }
 
@@ -340,8 +416,12 @@ export class CharactersService extends BaseService {
    * This method doesn't expect any request body.
    */
   getCharacterArtifacts$Response(params: {
+
+    /**
+     * Id of the character
+     */
     characterId: string;
-  }): Observable<StrictHttpResponse<void>> {
+  }): Observable<StrictHttpResponse<Array<IArtifact>>> {
 
     const rb = new RequestBuilder(this.rootUrl, CharactersService.GetCharacterArtifactsPath, 'get');
     if (params) {
@@ -354,7 +434,7 @@ export class CharactersService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+        return r as StrictHttpResponse<Array<IArtifact>>;
       })
     );
   }
@@ -368,11 +448,15 @@ export class CharactersService extends BaseService {
    * This method doesn't expect any request body.
    */
   getCharacterArtifacts(params: {
+
+    /**
+     * Id of the character
+     */
     characterId: string;
-  }): Observable<void> {
+  }): Observable<Array<IArtifact>> {
 
     return this.getCharacterArtifacts$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+      map((r: StrictHttpResponse<Array<IArtifact>>) => r.body as Array<IArtifact>)
     );
   }
 

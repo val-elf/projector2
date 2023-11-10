@@ -1,0 +1,9 @@
+<div class="menu-container" [ngClass]="{ isOpen: isOpen }">
+    <h3>{{ project.name }}</h3>
+    <ul>
+        <li>
+            <a (click)="showProjectSettings()">{{ 'Project Settings' }}</a>
+        </li>
+    </ul>
+</div>
+<ng-content></ng-content>

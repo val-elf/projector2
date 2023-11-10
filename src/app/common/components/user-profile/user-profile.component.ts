@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IUser } from '~/models/user.model';
+import { IUser } from '~/services/api/models';
 
 @Component({
     selector: 'app-user-profile',

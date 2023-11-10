@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { ProjectsService } from '~/services/projects.service';
+import { ProjectsService } from '~/services/api/services';
 
 @Component({
     selector: 'app-dashboard',

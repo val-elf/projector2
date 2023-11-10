@@ -1,3 +1,4 @@
 <div>
-    {{ user?.login }}
+    {{ user?.firstName.substring(0, 1).toUpperCase() }}{{ user?.lastName.substring(0, 1).toUpperCase() }}
 </div>
+| <a [routerLink]="'/logout'">{{ 'Logout' | translate }}</a>

@@ -13,4 +13,7 @@ export interface IProject {
   description?: string;
   name: string;
   preview?: IPreview;
+  settings?: {
+'_schema'?: TObjectId;
+};
 }

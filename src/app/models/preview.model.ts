@@ -1,12 +1,6 @@
-import { IBaseServerItem } from './base-server.model';
+import { IPreview } from '~/services/api/models';
+import { IDbObjectBase } from './base-server.model';
 
-export interface IPreviewOwner extends IBaseServerItem {
-    preview: IPreview;
-}
-
-export interface IPreview {
-    type: string;
-    height: number;
-    width: number;
-    preview?: string;
+export interface IPreviewOwner extends IDbObjectBase {
+    preview?: IPreview;
 }
