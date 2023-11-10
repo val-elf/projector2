@@ -1,11 +1,11 @@
 import { Injectable } from "@angular/core";
-import { ActivatedRouteSnapshot, Resolve } from "@angular/router";
+import { ActivatedRouteSnapshot } from "@angular/router";
 import { Observable } from "rxjs";
 import { IArtifact } from "~/services/api/models";
 import { ArtifactsService } from "~/services/api/services";
 
 @Injectable({ providedIn: 'root' })
-export class ArtifactsResolver implements Resolve<IArtifact[]>
+export class ArtifactsResolver 
 {
     constructor(
         private artifactsService: ArtifactsService,

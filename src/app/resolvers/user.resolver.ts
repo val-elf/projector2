@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { IServerUser, IUser } from '~/services/api/models';
 import { UsersService } from '~/services/api/services';
 
 @Injectable({ providedIn: 'root' })
-export class UserResolver implements Resolve<IServerUser> {
+export class UserResolver  {
 
     constructor(
         private userService: UsersService,
