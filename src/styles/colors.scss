@@ -20,6 +20,7 @@ $dirty-white: #E0E0E0;
 $paper-white: #F0F0F0;
 $white: #FFFFFF;
 
+$primary-color: #3f5955;
 $border-color: #A7A3B2;
 $item-border-color: #C3A58B;
 $text-color: #474352;
@@ -65,5 +66,13 @@ $table-row-color: #FEF0E0;
 $table-row-hover-color: #F0EFE0;
 
 :root {
-    --main-color: #{$link-color};
+    --main-color: #{$primary-color};
+    --link-color: #{$link-color};
+    --hover-link-color: #{$hover-link-color};
+    --header-color: #{$heading-color};
+    --text-header-color: #{$paper-white};
+
+/* material override */
+    --mat-form-field-state-layer-color: transparent;
+    --mdc-filled-text-field-container-color: transparent;
 }

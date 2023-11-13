@@ -1,0 +1,17 @@
+<section [formGroup]="formGroup">
+    <div>
+        <app-input
+            label="Project Name"
+            formControlName="name"
+            required
+        ></app-input>
+    </div>
+    <div>
+        <app-input
+            type="textarea"
+            label="Project Description"
+            formControlName="description"
+            rows="5"
+        ></app-input>
+    </div>
+</section>

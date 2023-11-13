@@ -1,6 +1,9 @@
+import { ComponentType } from '@angular/cdk/portal';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PopupComponent } from '~/common/components/popup/popup.component';
+import { IPopupOptions } from '~/models/popup.model';
+
 
 @Injectable({ providedIn: 'root' })
 export class PopupService {
@@ -10,11 +13,19 @@ export class PopupService {
 
     }
 
-    showPopup<T>(component, data: T) {
-        console.log('COmponent', component);
+    showPopup<T>(
+        Component: ComponentType<T>,
+        options: IPopupOptions,
+        data: T
+    ) {
         this.dialog.open(PopupComponent, {
-            width: '250px',
-            data: { component, data }
+            width: 'auto',
+            data: {
+                component: Component,
+                title: options.title,
+                actions: options.actions,
+                data
+            }
         });
     }
 }

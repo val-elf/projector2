@@ -1,6 +1,5 @@
 import { Component, Input, HostBinding, ViewChild, ElementRef, HostListener, AfterViewInit }  from '@angular/core';
 import { EIconTypes } from '../../preview/preview-image.component';
-import ResizeObserver from 'resize-observer-polyfill';
 import { IProject } from '~/services/api/models';
 
 @Component({

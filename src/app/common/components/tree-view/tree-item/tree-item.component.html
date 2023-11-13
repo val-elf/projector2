@@ -1,0 +1,11 @@
+<ng-container *ngIf="item.children">
+    <mat-icon (click)="expandToggle()" [ngClass]="{ collapsed }">chevron_right</mat-icon>
+</ng-container>
+{{ item.label }}
+<ng-container *ngIf="item.children">
+    <div class="tree-item-children" [ngClass]="{ collapsed }" #treeItemChildren>
+        <div class="tree-item-children__content">
+            <app-tree-item *ngFor="let child of item.children" [item]="child"></app-tree-item>
+        </div>
+    </div>
+</ng-container>

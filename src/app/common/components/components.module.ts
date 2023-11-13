@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
 
 import { ProjectsListComponent } from './project/projects-list/projects-list.component';
 import { ProjectListItemComponent } from './project/project-list-item/project-list-item.component';
@@ -13,12 +14,15 @@ import { ArtifactCardComponent } from './artifact/artifact-card.component';
 import { PipesModule } from '~/pipes/pipes.module';
 import { UiModule } from '../ui/ui.module';
 import { DocumentCardComponent } from './document/document-card.component';
+import { TreeViewComponent } from './tree-view/tree-view.component';
+import { TreeItemComponent } from './tree-view/tree-item/tree-item.component';
 
 @NgModule({
     imports: [
         CommonModule,
         PipesModule,
         RouterModule,
+        MatIconModule,
         UiModule,
     ],
     declarations: [
@@ -30,6 +34,8 @@ import { DocumentCardComponent } from './document/document-card.component';
         LocationCardComponent,
         ArtifactCardComponent,
         DocumentCardComponent,
+        TreeViewComponent,
+        TreeItemComponent,
     ],
     exports: [
         CharacterCardComponent,
@@ -40,6 +46,7 @@ import { DocumentCardComponent } from './document/document-card.component';
         LocationCardComponent,
         ArtifactCardComponent,
         DocumentCardComponent,
+        TreeViewComponent,
     ],
 })
 export class ComponentsModule {}

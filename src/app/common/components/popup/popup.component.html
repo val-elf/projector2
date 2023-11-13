@@ -1,4 +1,39 @@
-<div>hahha</div>
-<div *ngIf="component">
-    <ng-container [ngComponentOutlet]="component"></ng-container>
-</div>
+<h1 mat-dialog-title>
+    <ng-template [cdkPortalOutlet]="titlePortal"></ng-template>
+    <button mat-mini-fab mat-dialog-close color="primary"><mat-icon>close</mat-icon></button>
+</h1>
+
+<mat-dialog-content>
+    <ng-container *ngIf="component">
+        <ng-container *ngComponentOutlet="component; inputs: parameters"></ng-container>
+    </ng-container>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <ng-container *ngFor="let action of actions">
+        <ng-switch [ngSwitch]="action">
+            <ng-container *ngSwitchCase="actionTypes.Cancel">
+                <ng-container *ngTemplateOutlet="cancelButton"></ng-container>
+            </ng-container>
+            <ng-container *ngSwitchCase="actionTypes.Save">
+                <ng-container *ngTemplateOutlet="saveButton"></ng-container>
+            </ng-container>
+        </ng-switch>
+    </ng-container>
+</mat-dialog-actions>
+
+<ng-template #cancelButton>
+    <button mat-button mat-dialog-close color="primary">{{ 'Cancel' }}</button>
+</ng-template>
+
+<ng-template #okButton>
+    <button mat-button [mat-dialog-close]="true" color="primary">{{ 'OK' }}</button>
+</ng-template>
+
+<ng-template #saveButton>
+    <button mat-flat-button  color="primary" (click)="onSave()" [disabled]="!actionStates[actionTypes.Save]">{{ 'Save' }}</button>
+</ng-template>
+
+<ng-template #defaultTitle>
+    {{ title }}
+</ng-template>
+

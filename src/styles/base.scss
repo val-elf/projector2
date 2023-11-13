@@ -16,3 +16,7 @@
 .link {
     @include link();
 }
+
+.active {
+    @include active();
+}

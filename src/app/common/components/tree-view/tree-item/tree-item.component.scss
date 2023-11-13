@@ -1,0 +1,21 @@
+:host {
+    display: block;
+    padding-left: 24px;
+
+    .tree-item-children {
+        padding-left: 1em;
+        overflow: hidden;
+        height: 0px;
+        transition: height 0.3s ease-in-out;
+    }
+
+    mat-icon {
+        transition: transform 0.3s ease-in-out;
+        transform: rotate(90deg);
+        margin-left: -12px;
+        &.collapsed {
+            transform: rotate(0deg);
+        }
+    }
+
+}

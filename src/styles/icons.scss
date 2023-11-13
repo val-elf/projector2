@@ -34,7 +34,7 @@ $if: -55px;
 	height: -$ix;
 }
 
-[class^="icon-"],
+/*[class^="icon-"],
 [class*="icon-"] {
 	display: inline-block;
 	position: relative;
@@ -51,7 +51,7 @@ $if: -55px;
 [class^="icon-"]:before {
 	position:relative;
 	top:0;
-}
+}*/
 
 [class$="half"] {
 	position: absolute;
@@ -185,7 +185,7 @@ $if: -55px;
 
 .icon16{
 	@include iconic16();
-	background-position: 0 -$ix;
+	background-position: 0 - $ix;
 
 	&.hovered{
 		transition: opacity 1s;

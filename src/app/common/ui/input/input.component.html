@@ -1,0 +1,28 @@
+<mat-form-field color="primary" appearance="fill">
+    <mat-label>{{ label }}</mat-label>
+    <ng-container [ngSwitch]="type">
+        <ng-container *ngSwitchCase="'textarea'">
+            <textarea resize="false"
+                matInput
+                [placeholder]="placeholder ?? label"
+                [value]="value"
+                (change)="handleChange($event)"
+                (input)="handleInput($event)"
+                [rows]="rows"
+                [required]="required"
+            ></textarea>
+        </ng-container>
+        <ng-container *ngSwitchDefault>
+            <input
+                [type]="type"
+                matInput
+                [placeholder]="placeholder ?? label"
+                [value]="value"
+                (change)="handleChange($event)"
+                (input)="handleInput($event)"
+                [required]="required"
+            />
+        </ng-container>
+    </ng-container>
+    <app-input-form-errors [errors]="ngControl.errors"></app-input-form-errors>
+</mat-form-field>

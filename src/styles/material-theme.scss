@@ -3,8 +3,58 @@
 
 @include mat.core;
 
-$my-primary: mat.define-palette(mat.$indigo-palette, 500);
-$my-accent: mat.define-palette(mat.$indigo-palette, A200, A100, A400);
+$projector-palette: (
+  50: #e3f6f4,
+  100: #bbe9e5,
+  200: #93dbd6,
+  300: #73ccc8,
+  400: #65c1be,
+  500: #5eb7b7,
+  600: #58a7a6,
+  700: #51918f,
+  800: #4b7d7a,
+  900: #3f5955,
+  contrast: (
+    50: #e3f6f4,
+    100: #e3f6f4,
+    200: #e3f6f4,
+    300: #5eb7b7,
+    400: #5eb7b7,
+    500: #5eb7b7,
+    600: #5eb7b7,
+    700: #4b7d7a,
+    800: #4b7d7a,
+    900: #4b7d7a,
+  )
+);
+
+$projector-accent-palette: (
+  50: #e8f6e4,
+  100: #c8e7be,
+  200: #a3d893,
+  300: #7cca66,
+  400: #5dbe41,
+  500: #3db30e,
+  600: #32a300,
+  700: #229200,
+  800: #0c8100,
+  900: #006200,
+  contrast: (
+    50: #e8f6e4,
+    100: #e8f6e4,
+    200: #e8f6e4,
+    300: #3db30e,
+    400: #3db30e,
+    500: #3db30e,
+    600: #3db30e,
+    700: #006200,
+    800: #006200,
+    900: #006200,
+  )
+);
+
+$my-primary: mat.define-palette($projector-palette, 800);
+$my-accent: mat.define-palette($projector-accent-palette, 500);
 $my-warn: mat.define-palette(mat.$red-palette);
 
 $my-theme: mat.define-light-theme((
@@ -16,3 +66,21 @@ $my-theme: mat.define-light-theme((
 ));
 
 @include mat.all-component-themes($my-theme);
+
+.cdk-global-scrollblock {
+  position: fixed;
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.mat-mdc-button:not(:disabled) {
+  &:hover {
+      text-decoration: underline;
+  }
+}
+
+.mat-mdc-button .mat-mdc-button-persistent-ripple{
+  &::before {
+      --mat-text-button-state-layer-color: transparent;
+  }
+}

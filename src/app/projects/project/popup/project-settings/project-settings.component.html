@@ -1,2 +1,9 @@
-<div>THIS IS PROJECT SETTINGS!!!</div>
-<div>{{ project.name }}</div>
+<div>
+    <mat-tab-group>
+        <mat-tab [label]="'Schemas' | translate">
+                <mat-checkbox color="primary">{{' Use Standart Schema'}}</mat-checkbox>
+            <app-tree-view [tree]="categorySchemaHierarchy"></app-tree-view>
+        </mat-tab>
+        <mat-tab [label]="'CommmonSettings' | translate">Common Settings</mat-tab>
+    </mat-tab-group>
+</div>

@@ -2,8 +2,20 @@
     <h3>{{ project.name }}</h3>
     <ul>
         <li>
-            <a (click)="showProjectSettings()">{{ 'Project Settings' }}</a>
+            <a (click)="showEditForm()" class="active link">{{ 'Edit' | translate }}</a>
+        </li>
+        <li>
+            <a (click)="showProjectSettings()" class="active link">{{ 'Project Settings' | translate }}</a>
         </li>
     </ul>
 </div>
 <ng-content></ng-content>
+
+<ng-template #popupEditHeader>
+    <span [ngStyle]="{ fontWeight: 300 }">{{ project.name}} | </span>&nbsp;Profile
+</ng-template>
+
+<ng-template #popupSettingsHeader>
+    <span [ngStyle]="{ fontWeight: 300 }">{{ project.name}} | </span>&nbsp;Settings
+</ng-template>
+
